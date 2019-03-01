@@ -1,0 +1,100 @@
+﻿@model LogisticsApp.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Qeydiyyat";
+}
+
+<section id="registration" class="container container-fluid">
+    <div class="offset-2 col-md-8">
+        <h4>@ViewBag.Title.</h4>
+
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <p>Qeydiyyat sehifesine xos geldiniz</p>
+            <hr />
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.Name) })
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    @Html.TextBoxFor(m => m.Surname, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.Surname) })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.Email) })
+
+                </div>
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.PhoneNumber) })
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.Password) })
+
+                </div>
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.ConfirmPassword) })
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+
+
+                    <select class="form-control" name="sex">
+                        <option value="">@Html.DisplayNameFor(m => m.Sex) </option>
+                        <option value="Male">Kisi</option>
+                        <option value="Female">Qadin</option>
+                    </select>
+
+                </div>
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.Birthday) })
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.Address) })
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.TextBoxFor(m => m.IDCardNumber, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.IDCardNumber) })
+
+                </div>
+                <div class="col-md-6 col-xs-12">
+
+                    @Html.TextBoxFor(m => m.FINNumber, new { @class = "form-control", @style = "margin-bottom:25px", @placeholder = Html.DisplayNameFor(m => m.FINNumber) })
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-secondary" value="Qeyd ol" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</section>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

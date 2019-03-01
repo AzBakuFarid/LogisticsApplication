@@ -1,0 +1,45 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.News>
+
+@{
+    ViewBag.Title = "News";
+}
+<section id="news" class="container container-fluid ">
+    <div class="jumbotronDiv">
+        <h1 class="display-4">En son xeberler</h1>
+    </div>
+    <div class="offset-1 col-md-10">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                var date = (item.Modified != null) ? item.Modified : item.Created;
+                string text;
+                if (item.Text.Length > 80) { text = item.Text.Substring(0, 70) + "..."; }
+                else { text = item.Text; }
+
+                <div class="col-xs-12 newsContentGeneral" style="width:30%;">
+                    <div class="row newsImg"><img src="@item.PicturePath" alt="nopicture"></div>
+                    <div class="row newsTitle">
+                        <span>@item.Title</span>
+                    </div>
+                    <div class="row newsDate">
+                        <span>
+                            <i class="far fa-calendar-alt"></i>@date.ToString()
+                        </span>
+                    </div>
+
+                    <div class="row newsText">
+                        <p>@text</p>
+                    </div>
+                    <div class="row">
+                        <a href="Details/@item.Id" type="button" class="btn btn-outline-info btn-sm ml-auto mr-auto">etrafli</a>
+                    </div>
+                </div>
+            }
+          
+
+        </div>
+    </div>
+
+
+
+</section>

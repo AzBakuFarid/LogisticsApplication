@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="~/Content/style.css">
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <section id="header" class="container container-fluid bgColor-txtColor">
+        <div class="row">
+            <div class="col-md-2">
+                <a href="/Home/Index">
+                    <img src="~/img/logo.jpg" alt="logo" width="50" height="50" class="offset-5">
+                </a>
+            </div>
+            <div class="col-md-4" style="padding:5px;">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control rounded-pill searchField" placeholder="search" aria-label="Recipient's username"
+                           aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-light rounded-circle searchBtn">
+                            <i class="fas fa-search" style="color:black"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+            <div class="col-md-1">
+                <!-- burda dil secimi ve sebet sekli olacaq -->
+            </div>
+        </div>
+    </section>
+    <section id="navbar" class="container container-fluid ">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/Index">
+                            Esas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/FAQ/Index">FAQ</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Numune saytlar
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @{Html.RenderAction("RenderList", "Market"); }
+                           
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/News/Index">
+                            Xeberler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Abouts/Index"> 
+                            Haqqimizda
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Taariff/Index">
+                            Taarifler
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="/Contact/Index">
+                            Kontakt
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+
+
+    @RenderBody()
+
+    <section id="footer" class="container container-fluid ">
+        <div class="row">
+            <div>
+                <img src="~/img/logo.jpg" alt="logo" width="50" height="50" class="offset-5">
+            </div>
+            <div class="offset-8 ml-auto">
+                <a href="https://www.facebook.com">
+                    <img src="~/img/footer/facebook.png" alt="" srcset="">
+                </a>
+                <a href="http://instagram.com">
+                    <img src="~/img/footer/instagram.png" alt="" srcset="">
+                </a>
+                <img src="~/img/footer/mastercard.png" alt="">
+                <img src="~/img/footer/visa.png" alt="">
+            </div>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="~/Scripts/main.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

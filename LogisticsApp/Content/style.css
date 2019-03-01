@@ -1,0 +1,303 @@
+*{
+box-sizing: border-box;
+
+}
+.uppercase{
+    text-transform:  uppercase;
+}
+.capitalize {
+    text-transform:capitalize;
+}
+.underlined-bold {
+   font-weight:bold; 
+   text-decoration:underline;
+}
+.position-relative{
+    position: relative;
+}
+section {
+    margin-top: 10px;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.bgColor-txtColor{
+    background-color: rgb(18, 18, 70);
+    color:white;
+}
+
+#navbar {
+    background-color: white;
+}
+
+.list-group>a:hover, .list-active{
+    background-color: rgb(18, 18, 70);
+    color: white
+}
+
+.card-body label, .card-body span{
+    display: block;
+    text-align: left;
+    margin:0;
+    font-weight: bold;
+    font-size: 18px;
+}
+.card-body > div {
+    display: none;
+}
+.card-body >.showonStart {
+    display: block;
+}
+.card-body label{
+    opacity: .5;
+}
+
+.jumbotronDiv{
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+.searchBtn{
+    position: absolute;
+    right: 40px;
+    top: 3px;
+    height: 35px;
+    width: 35px;
+    z-index: 1000  !important;
+
+}
+.searchField{
+    height: 40px;
+
+}
+
+#news .newsImg {
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+.newsImg img {
+    height: 100%;
+    max-width: 100%;
+    display: block;
+    margin: auto;
+}
+.newsContent {
+    position: relative;
+}
+#newsCreatedTime{
+    position: absolute;
+    right: 25px;
+    bottom: 0;
+    color: red;
+    font-weight: bold;
+}
+#footer{
+    background-color: #282e3e
+}
+
+.process-step{
+    position: relative;
+    text-align:center;
+}
+.process-icon {
+    position: relative;
+    border: solid 2px rgb(18, 18, 70);
+    border-radius: 100%;
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.process-icon  span {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 27px;
+    font-weight: bold;
+    position: absolute;
+    top: 30%;
+    left: -30px;
+    display: inline-block !important;
+    background-color: rgb(18, 18, 70);
+    color: white;
+    border-radius: 100%;
+    border: solid 2px white;
+}
+#calculator{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: lightcoral;
+    opacity: .9;
+    padding: 0 30px ;
+}
+.parallax{
+   position: relative;
+        background-image: url("/img/calculator/1.jpg");
+     
+        min-height: 400px; 
+  
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+}
+
+
+.newsContentGeneral{
+   height:300px;
+  border-radius: 5px;
+  border: solid 1px rgba(0,0,0,.1);
+    box-shadow: 1px 1px 4px 0px rgba(153,153,153,0.4);
+    margin: 15px;
+}
+.newsContentGeneral .newsImg {
+    height: 30%;
+}
+.newsContentGeneral .newsTitle, 
+.newsContentGeneral .newsDate, 
+.newsContentGeneral .newsText {
+    margin: 10px;
+   
+}
+.boxShadow {
+    border-radius: 5px;
+    border: solid 1px rgba(0,0,0,.1);
+      box-shadow: 1px 1px 4px 0px rgba(153,153,153,0.4);
+      padding: 15px;
+}
+
+.newsHeader{
+    background-color: rgb(18, 18, 70);
+    color: white;
+    
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 50px;
+    border-radius: 5px;
+    
+}
+.newsItem{
+    background-color: lightgrey;
+    border-bottom: dotted .5px black
+}
+
+.newsItemImage {
+    padding: 10px 10px 10px 30px;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: white;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    border:solid 1px rgba(153,153,153,0.4);
+    margin: 5px 0;
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .accordion:hover {
+    background-color: rgb(18, 18, 70);
+    color: white;
+  }
+  
+  /* Style the accordion panel. Note: hidden by default */
+  .panel {
+    padding: 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+  }
+  .accordion .panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+  .accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  #FAQ .active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+  }
+.list-group-item-first {
+    font-size: 20px
+}
+.contactIcons{
+    color: rgb(18, 18, 70);
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+}
+.contactAddress span {
+    font-size: 13px;
+    display: block;
+}
+#contactEmail{
+    color: red;
+    text-decoration: none;
+    font-size: 13px;
+}
+.contactsInfoHeader{
+    font-weight: bold;
+}
+
+#markets .list-group-item {
+    margin-bottom: 5px;
+}
+#markets .list-group-item a {
+    text-decoration: none;
+    color: black;
+}
+#markets .list-group-item a:after {
+    content: "\003E"; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+    font-weight: bold;
+}
+#markets .list-group-item:hover, .activemarketcategory{
+    background-color: rgb(18, 18, 70);
+    cursor: pointer;
+   
+}
+#markets .list-group-item:hover a, #markets .activemarketcategory a{
+     color: white;
+}
+.marketImages{
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+.marketImages > div{
+margin: 20px;
+}
+#registration > div {
+    background-color: rgba(1, 53, 111, 1);
+    padding: 20px;
+    color: white;
+}
+

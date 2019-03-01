@@ -1,0 +1,28 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.Step>
+@{ 
+    var counter = 1;
+
+}
+<section id="howDoesItWork" class="container container-fluid ">
+    <div class="jumbotronDiv" style="text-align:center">
+        <h1>Nece isleyir</h1>
+    </div>
+    <div class="row ">
+        @foreach (var item in Model)
+        {
+           
+            <div class="col-md-3 col-xs-12 process-step">
+                <div class="process-icon">
+                    <span> @(counter++)</span>
+                    <img src="/@item.ImgPath" alt="">
+                </div>
+                <p>@item.Text</p>
+
+            </div>
+           
+        }
+
+       
+
+    </div>
+</section>

@@ -1,0 +1,134 @@
+﻿@model LogisticsApp.Models.Page.Contact
+
+
+@{
+    ViewBag.Title = "Contact";
+    string address, phone, mobile, email;
+    if (Model == null)
+    {
+        address = ""; phone = ""; mobile = ""; email = "";
+
+    }
+    else
+    {
+        address = Model.Address;
+        phone = Model.Phonenumber;
+        mobile = Model.Mobilenumber;
+        email = Model.Email;
+    }
+
+}
+
+
+
+<section id="contact" class="container container-fluid ">
+    <div class="jumbotronDiv">
+        <h4 class="display-4">Bizimle elaqe</h4>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <form action="" method="POST">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input type="text" class="form-control" placeholder="Your full name">
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <input type="text" class="form-control" placeholder="Company">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <input type="email" class="form-control" placeholder="Email">
+                                        </div>
+                                        <div class="col-lg-6 col-sm-12">
+                                            <input type="text" class="form-control" placeholder="Phone number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <textarea class="form-control" placeholder="Message"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-danger">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-5 contactAddress">
+                        <div class="list-group">
+                            <div class="list-group-item list-group-item-first bgColor-txtColor">
+                                U N V A N
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-1 contactIcons">
+                                        <i class="fas fa-map-marker"></i>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <span class="contactsInfoHeader">Unvan</span>
+                                        <span>
+                                            @address
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-1 contactIcons">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <span class="contactsInfoHeader">Telefon</span>
+                                        <span>
+                                            @phone
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-1 contactIcons">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <span class="contactsInfoHeader">Mobile</span>
+                                        <span>
+                                            @mobile
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-1 contactIcons">
+                                        <i class="fas fa-at"></i>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <span class="contactsInfoHeader">Email</span>
+                                        <a id="contactEmail" href="@("mailto:"+@email)"> @email </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+

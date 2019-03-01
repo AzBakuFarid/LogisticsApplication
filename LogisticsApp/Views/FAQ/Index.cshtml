@@ -1,0 +1,24 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.FAQ>
+
+@{
+    ViewBag.Title = "Index";
+}
+<section id="FAQ" class="container container-fluid ">
+    <div class="jumbotronDiv">
+        <h1 class="display-4">F O R U M</h1>
+    </div>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+
+            <div class="col-md-12">
+                <button class="accordion "> <span class="underlined-bold"> Sual:</span> &#32;&#32; @item.Question</button>
+                <div class="panel">
+                    <p>
+                        <span class="underlined-bold"> Cavab:</span> &#32;&#32; @item.Answer
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

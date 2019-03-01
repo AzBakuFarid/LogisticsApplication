@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@Html.Partial("PartialCarusel", ViewBag.Carusel as IEnumerable<LogisticsApp.Models.Page.Carusel>)
+@Html.Partial("PartialNews", ViewBag.LatesNews as IEnumerable<LogisticsApp.Models.Page.News>)
+<section class="container container-fluid parallax">
+    <div id="calculator">
+        <div class="row">
+            <div class="jumbotronDiv">
+                <h2>K A L K U L Y A T O R</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <select name="country" id="" class="form-control">
+                                <option value="Turkey">Turkey</option>
+                                <option value="USA">USA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="count" placeholder="Bağlama sayı (məs:1,2,3)" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="number" class="form-control" placeholder="Uzunluq (sm)" id="length" required="">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="number" class="form-control" placeholder="En (sm)" id="width" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="number" class="form-control" placeholder="Hundurluk (sm)" id="height" required="">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="number" class="form-control" placeholder="Ceki (sm)" id="weight" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button class=" btn btn-secondary" type="submit" onclick="calculatePrice()">Hesabla</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Cemi</h4>
+                        <h4>
+                            <span id="calculatorResult">0.00</span>$
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    burada Siz baglamanizin olculerini daxil edib hemin baglamnin catdirilmasi ucun odemeli olacaginiz meblegi
+                    evvelceden oyrene bilersiniz!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+@Html.Partial("PartialSteps", ViewBag.steps as IEnumerable<LogisticsApp.Models.Page.Step>)

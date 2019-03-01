@@ -1,0 +1,56 @@
+﻿@model IEnumerable<LogisticsApp.Models.General.Category>
+
+@{
+    ViewBag.Title = "Markets";
+    string activeClass = "";
+
+}
+
+
+<section id="markets" class="container container-fluid ">
+    <div class="row">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="list-group uppercase" style="font-size:16px">
+                        <li class="list-group-item  list-group-item-first bgColor-txtColor">
+                            <h4 class="list-group-item-heading">
+                                kateqoriyalar
+                            </h4>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/Market/Index">
+                                Butun kateqoriyalar
+                            </a>
+                        </li>
+                        @foreach (var item in Model)
+                        {
+                            if (item.Id == ViewBag.selected) { activeClass = "activemarketcategory"; }
+                            else { activeClass = ""; }
+                            <li class="list-group-item @activeClass">
+                                <a href="/Market/Index/@item.Id">
+                                    @item.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <div class="marketImages">
+                        @foreach (var item in ViewBag.markets)
+                        {
+                        <div class="">
+                            <a href="@item.Link">
+                                <img src="@item.ImgPath" alt="" width="150px" height="150px">
+                            </a>
+                        </div>
+                        }
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

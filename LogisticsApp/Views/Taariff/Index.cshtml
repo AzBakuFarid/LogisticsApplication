@@ -1,0 +1,49 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.Taariff>
+
+@{
+    ViewBag.Title = "Taariff";
+}
+
+<section id="tariffs" class="container container-fluid ">
+    <div class="jumbotronDiv">
+        <h1 class="display-4">Taarifler</h1>
+    </div>
+    <div id="tariffContent">
+        @foreach (var item in ViewBag.countries)
+        {
+            <div class="row mr-auto ml-auto ">
+                <table class="table table-sm table-responsive-sm">
+                    <tbody>
+                        <tr>
+                            <td rowspan="@(Model.Where(w=>w.CountryId==item.Id).Count()+1)">
+                                <img src="@item.imagePath" alt="" width="150px" height="150px">
+                            </td>
+                        </tr>
+                        @foreach (var row in Model.Where(w => w.CountryId == item.Id && w.isActive == true))
+                        {
+                            <tr>
+                                <td>
+                                    <h4>@row.Weight -></h4>
+                                </td>
+                                <td>
+                                    <h4>@row.Price</h4>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <br>
+
+    </div>
+    <br>
+    <p>
+        Sifariş olunan bağlamanın çatdırılma haqqı çəkiyə görə hesablanır. Ölçüsü 1 metrdən böyük olan bağlamaların çatdırılma haqqı
+        həcminə görə hesablanır. Həcmi çəkinin hesablanması üçün en*hündürlük* uzunluq/6000 standartı tətbiq edilir.
+    </p>
+</section>
+

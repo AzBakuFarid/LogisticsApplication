@@ -1,0 +1,35 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.News>
+
+<section id="news" class="container container-fluid ">
+    <div class="jumbotronDiv" style="text-align:center">
+        <h1>Yeni ne xeber var</h1>
+        <p>xidmetlerimizle bagli yenilikleri buradan oyrene bilersiniz</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                var imgUrl = item.PicturePath.Replace("\\", "/");
+                DateTime DateSingle = item.Modified != null ? (DateTime)item.Modified : item.Created;
+                var DateSingleView = DateSingle.Day + "." +
+                                      DateSingle.Month.ToString() + "." +
+                                      DateSingle.Year.ToString();
+                <div class="col-md-4 col-xs-12 ">
+                    <div class="row ">
+                       
+                        <div class="col-md-4 newsImg" style="background-image:url('@imgUrl')"></div>
+                        <div class="col-md-8 newsContent">
+                            <p>@item.Title</p>
+
+                    
+                            <a href="RootTo/@item.Id"> etrafli oxu > </a>
+                            <span id="newsCreatedTime">@DateSingleView</span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</section>

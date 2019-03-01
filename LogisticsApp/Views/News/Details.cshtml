@@ -1,0 +1,65 @@
+﻿@model LogisticsApp.Models.Page.News
+
+@{
+    ViewBag.Title = "News";
+    DateTime DateSingle = @Model.Modified != null ? (DateTime)@Model.Modified : @Model.Created;
+    var DateSingleView = DateSingle.Day + "." +
+                          DateSingle.Month.ToString() + "." +
+                          DateSingle.Year.ToString();
+}
+
+<section id="newspage" class="container container-fluid ">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="boxShadow">
+                        <h3>@Model.Title</h3>
+                        <span>@DateSingleView</span>
+                        <p>
+                            @Model.Text
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row  newsHeader">
+                                <span class="mr-auto ml-auto">EN YENI XEBERLER</span>
+                            </div>
+                        </div>
+                    </div>
+                    @foreach (var item in ViewBag.LatesNews)
+                    {
+                        DateTime DateMultiple = item.Modified != null ? (DateTime)@item.Modified : @item.Created;
+                        var DateMultipleView = DateMultiple.Day + "." +
+                            DateMultiple.Month.ToString() + "." +
+                            DateMultiple.Year.ToString();
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row newsItem">
+                                    <div class="col-md-4 newsItemImage">
+                                        <img src="@item.PicturePath" width="60px" height="60px" alt="">
+                                    </div>
+                                    <div class="col-md-8 newsContent">
+                                        <p>@item.Title</p>
+                                        <a href="/News/Details/@item.Id"> etrafli oxu > </a>
+                                        <span id="newsCreatedTime">@DateMultipleView</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>

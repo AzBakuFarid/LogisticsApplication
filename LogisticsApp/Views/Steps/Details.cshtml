@@ -1,0 +1,42 @@
+﻿@model LogisticsApp.Models.Page.Step
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Step</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.isActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ImgPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImgPath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
