@@ -50,6 +50,7 @@ namespace LogisticsApp.Models
         public DbSet<Bundle> bundles { get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<Country> countries { get; set; }
+        public DbSet<CountryInformation> countryInformations { get; set; }
         public DbSet<Inquery> inqueries { get; set; }
         public DbSet<Message> messages { get; set; }
         public DbSet<MessagType> messageTypes { get; set; }

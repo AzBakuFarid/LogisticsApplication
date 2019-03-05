@@ -1,0 +1,203 @@
+﻿@model LogisticsApp.Models.CountriesInManagmentViewModel
+@{
+    Layout= "~/Views/Manage/Index.cshtml";
+    ViewBag.TitleSuffix = "Countries";
+    ViewBag.MessagesCounter = Model.MessageCounter;
+    ViewBag.InqueriesCounter = Model.InqueryCounter;
+    ViewBag.Balance = Model.Balance;
+    ViewBag.CustomerNumber = Model.CustomerID;
+
+    int counter = 0;
+    string classname = "";
+    var countries = (List<LogisticsApp.Models.General.Country>)ViewBag.countries;
+    var countryInformations = (List<LogisticsApp.Models.General.CountryInformation>)ViewBag.countryInformations;
+    var Turkey = countryInformations.Single(w => w.Country.Name == "Turkey");
+    var USA = countryInformations.Single(w => w.Country.Name == "USA");
+    var UAE = countryInformations.Single(w => w.Country.Name == "UAE");
+}
+
+<div id="countryInformations" class="card text-center">
+    <div class="jumbotronDiv">
+        <h1>DIQQET</h1>
+        <p>
+            Satıcı firmanın saytında sifariş verərkən ünvan hissəsini aşağıda qeyd olunan formada doldurmağınızı
+            xahiş edirik.
+        </p>
+    </div>
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            @foreach (var item in countries)
+            {
+                if (counter == 0) { classname = "active"; }
+                else { classname = ""; }
+
+                <li class="nav-item">
+                    <a class="nav-link @classname" href="#" data-id="@item.Name.ToLower()">@item.Name.ToUpper()</a>
+                </li>
+            }
+            @{
+                classname = "";
+                counter = 0;
+            }
+
+        </ul>
+    </div>
+    <div class="card-body">
+
+        <div id="turkey" class="showonStart">
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Ad Soyad:</label>
+                    <span>Farid Cargo</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Semt:</label>
+                    <span>@Turkey.Semt</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Adres 1:</label>
+                    <span>@Turkey.AddressLine1 @Model.Username @Model.UserSurname</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">ZIP/Post Kodu:</label>
+                    <span>@Turkey.ZIPcode</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Il (Sehir):</label>
+                    <span>@Turkey.City</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Ulke:</label>
+                    <span>Turkiye</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Ilce:</label>
+                    <span>@Turkey.Ilce</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">TC kimlik:</label>
+                    <span>@Turkey.IDNumber</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Adres başlığı:</label>
+                    <span>@Turkey.Addressheader</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Cep telefonu:</label>
+                    <span>@Turkey.PhoneNumber</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Vergi numarası:</label>
+                    <span>@Turkey.TaxIDNumber</span>
+                </div>
+
+            </div>
+        </div>
+        <div id="usa">
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Ad Soyad:</label>
+                    <span>Farid Cargo</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">State/Province/Region:</label>
+                    <span>@USA.State</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Address Line1:</label>
+                    <span>@USA.AddressLine1</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">ZIP/Postal Code:</label>
+                    <span>@USA.ZIPcode</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Address Line2:</label>
+                    <span>@USA.AddressLine2</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Country:</label>
+                    <span>USA</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">City:</label>
+                    <span>@USA.City</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Phone number:</label>
+                    <span>@USA.PhoneNumber</span>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div id="uae">
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Full Name:</label>
+                    <span>@Model.Username @Model.UserSurname</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Area:</label>
+                    <span>@UAE.Area</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Address Line1:</label>
+                    <span>@USA.AddressLine1</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Country:</label>
+                    <span>UAE</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">Address Line2:</label>
+                    <span>@UAE.AddressLine2</span>
+                </div>
+                <div class="col-md-6 ">
+                    <label for="">Phone number:</label>
+                    <span>@UAE.PhoneNumber</span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6 ">
+                    <label for="">City:</label>
+                    <span>@UAE.City</span>
+                </div>
+
+                <br />
+            </div>
+
+        </div>
+    </div>
+
+</div>

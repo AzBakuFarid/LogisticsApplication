@@ -6,18 +6,69 @@ using Microsoft.Owin.Security;
 namespace LogisticsApp.Models
 {
 
-    public class IndexViewModel
+    public class CountriesInManagmentViewModel :GeneralContentViewModel
     {
-
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
-        public int Messages { get; set; }
-        public int Inqueries { get; set; }
-        public int CustomerNumber { get; set; }
+        public string Username { get; set; }
+        public string UserSurname { get; set; }
+    }
+    public class EditPersonalDataViewModel : GeneralContentViewModel
+    {
+
+        [EmailAddress]
+        [Display(Name = "Email *")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Ad *")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Soyad *")]
+        public string Surname { get; set; }
+
+        [Required]
+        [Display(Name = "Dogum tarixi *")]
+        public string Birthday { get; set; }
+
+        [Required]
+        [Display(Name = "Unvan *")]
+        public string Address { get; set; }
+
+        [Required]
+        [Display(Name = "Sexsiyyet vesiqesinin seriya ve nomresi *")]
+        public string IDCardNumber { get; set; }
+
+        [Required]
+        [StringLength(7, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 7)]
+        [Display(Name = "FIN *")]
+        public string FINNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Telefon *")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Parol")]
+        public string NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Parolu tekrar daxil edin")]
+        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    public class GeneralContentViewModel {
+        public int CustomerID { get; set; }
         public double Balance { get; set; }
+        public int MessageCounter { get; set; }
+        public int InqueryCounter { get; set; }
     }
 
     public class ManageLoginsViewModel
@@ -45,24 +96,7 @@ namespace LogisticsApp.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class ChangePasswordViewModel
-    {
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
-        public string OldPassword { get; set; }
-
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "New password")]
-        public string NewPassword { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
-    }
+   
 
     public class AddPhoneNumberViewModel
     {

@@ -17,6 +17,6 @@ namespace LogisticsApp.Models.General
         public virtual ICollection<Order> orders { get; set; }
         public virtual ICollection<Taariff> Taariffs { get; set; }
         public virtual ICollection<Market> markets { get; set; }
-        public virtual ICollection<CountryInformation> countryInformations { get; set; }
+        public virtual CountryInformation countryInformation { get; set; }
     }
 }

@@ -32,9 +32,9 @@ namespace LogisticsApp.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
         public ApplicationUserManager UserManager
@@ -51,19 +51,19 @@ namespace LogisticsApp.Controllers
 
 
         //GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Countries() // bu helelik lazim deyil.. amma sonra lazim olacaq. haziri var deye silmedim ---> (ManageMessageId? message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+            //ViewBag.StatusMessage =
+            //    message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+            //    : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+            //    : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
+            //    : message == ManageMessageId.Error ? "An error has occurred."
+            //    : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+            //    : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+            //    : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+            var model = new CountriesInManagmentViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
@@ -71,18 +71,93 @@ namespace LogisticsApp.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
-                       
-            model.Balance = await model.getUserBalanceAsync(userId);
-            model.Messages = await model.getUserUnreadMessagesAsync(userId);
-            model.Inqueries = await model.getUserUnAnsweredInqueriesAsync(userId);
-            model.CustomerNumber = await model.getUserCustomerNumberAsync(userId);
 
-            var countries = await CustomMethods.getCountryInformationsAsync();
+            model.Balance = await model.getUserBalanceAsync(userId);
+            model.MessageCounter = await model.getUserUnreadMessagesAsync(userId);
+            model.InqueryCounter = await model.getUserUnAnsweredInqueriesAsync(userId);
+            model.CustomerID = await model.getUserCustomerNumberAsync(userId);
+            model.Username = await model.getUserNameAsync(userId);
+            model.UserSurname = await model.getUserSurnameAsync(userId);
+
+            var countries = await CustomMethods.getCountriesAsync();
             ViewBag.countries = countries.Where(w => w.isActive == true).ToList();
-            return View(model);
+            ViewBag.countryInformations = await CustomMethods.getCountryInformationsAsync();
+            return PartialView(model);
         }
 
-       
+        public async Task<ActionResult> getUMGC() // get User Managment General Content
+        {
+
+            return PartialView();
+         }
+        // GET: /Manage/ChangePassword
+        public async Task<ActionResult> EditPersonalData()
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            }
+            var userId = User.Identity.GetUserId();
+            var model = new EditPersonalDataViewModel();
+            model.Name = user.Name;
+            model.Surname = user.Surname;
+            model.PhoneNumber = user.PhoneNumber;
+            model.IDCardNumber = user.IDCardNumber;
+            model.FINNumber = user.FINNumber;
+            model.Birthday = user.Birthday;
+            model.Address = user.Address;
+            model.Email = user.Email;
+            model.Balance = await model.getUserBalanceAsync(userId);
+            model.MessageCounter = await model.getUserUnreadMessagesAsync(userId);
+            model.InqueryCounter = await model.getUserUnAnsweredInqueriesAsync(userId);
+            model.CustomerID = await model.getUserCustomerNumberAsync(userId);
+            return PartialView(model);
+        }
+
+
+        // POST: /Manage/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditPersonalData(EditPersonalDataViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), null, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                user.Name = model.Name;
+                user.Surname = model.Surname;
+                user.PhoneNumber = model.PhoneNumber;
+                user.IDCardNumber = model.IDCardNumber;
+                user.FINNumber = model.FINNumber;
+                user.Birthday = model.Birthday;
+                user.Address = model.Address;
+                result = await UserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+
+
+                    return RedirectToAction("Index", new { Message = ManageMessageId.UserEditSuccess });
+                }
+
+
+            }
+            AddErrors(result);
+            return View(model);
+        }
 
         //
         // POST: /Manage/RemoveLogin
@@ -222,43 +297,8 @@ namespace LogisticsApp.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
-        //
-        // GET: /Manage/ChangePassword
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
 
-        //
-        // POST: /Manage/ChangePassword
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-            {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                if (user != null)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
-            }
-            AddErrors(result);
-            return View(model);
-        }
 
-        //
-        // GET: /Manage/SetPassword
-        public ActionResult SetPassword()
-        {
-            return View();
-        }
 
         //
         // POST: /Manage/SetPassword
@@ -342,7 +382,7 @@ namespace LogisticsApp.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -390,9 +430,10 @@ namespace LogisticsApp.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            UserEditSuccess,
             Error
         }
 
-#endregion
+        #endregion
     }
 }

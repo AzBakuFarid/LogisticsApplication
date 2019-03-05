@@ -1,23 +1,22 @@
-﻿@model LogisticsApp.Models.IndexViewModel
+﻿
 @{
-    ViewBag.Title = "Farid Cargo";
-    string classname = "";
-    var a = classname.ToUpper();
-    var countries=(List< LogisticsApp.Models.General.Country>)ViewBag.countries;
+    ViewBag.Title = "Farid Cargo | " + ViewBag.TitleSuffix;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <section id="actions" class="container container-fluid " style="background-color:rgba(243, 240, 240, 0.596); ">
     <div class="row">
         <div class="col-md-3">
             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#BalanceModal" style="font-size:20px;">
-                Balans : @Model.Balance manat
+                Balans : @ViewBag.Balance manat
             </button>
 
         </div>
         <div class="offset-3 col-md-6">
             <ul class="nav justify-content-end">
                 <li class="nav-item" style="margin:5px">
-                    <span class="btn btn-secondary nav-link">Musteri kodu: @Model.CustomerNumber</span>
+                    <span class="btn btn-secondary nav-link">Musteri kodu: @ViewBag.CustomerNumber</span>
                 </li>
                 <li class="nav-item" style="margin:5px">
                     <a href="/Account/Order" class="btn btn-danger nav-link">Sifaris et</a>
@@ -39,7 +38,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <span class="form-control-item">Senin balansinda @Model.Balance manat pul var </span>
+                        <span class="form-control-item">Senin balansinda @ViewBag.Balance manat pul var </span>
                         <br>
                         <br>
                         <label class="form-control-item"> Balansina elave etmek istediyin meblegi burda yaz</label>
@@ -213,19 +212,22 @@
     <div class="row" style="margin-top:25px;">
         <div class="col-md-4">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action list-active">
-                    Xaricdeki unvanlar
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">Sifarislerim</a>
-                <a href="#" class="list-group-item list-group-item-action">Tenzimlemeler</a>
+                @Html.ActionLink("Xaricdeki unvanlar", "Countries", "Manage", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action list-active" })
+                @*<a href="/Manage/Countries" class="list-group-item list-group-item-action list-active">
+            Xaricdeki unvanlar
+        </a>*@
+                <a href="1231" class="list-group-item list-group-item-action">Sifarislerim</a>
+                @Html.ActionLink("Tenzimlemeler", "EditPersonalData", "Manage", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action" })
+
+                @*<a href="/Manage/EditPersonalData" class="list-group-item list-group-item-action">Tenzimlemeler</a>*@
                 <a href="#" class="list-group-item list-group-item-action">Balans</a>
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     Mesajlar
-                    <span class="badge badge-primary badge-pill">@Model.Messages</span>
+                    <span class="badge badge-primary badge-pill">@ViewBag.MessagesCounter</span>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     Sorgular
-                    <span class="badge badge-primary badge-pill">@Model.Inqueries</span>
+                    <span class="badge badge-primary badge-pill">@ViewBag.InqueriesCounter</span>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action">Cixis</a>
             </div>
@@ -233,556 +235,8 @@
         </div>
         <div class="col-md-8">
 
-            <div id="countryInformations" class=" card text-center">
-                <div class="jumbotronDiv">
-                    <h1>DIQQET</h1>
-                    <p>
-                        Satıcı firmanın saytında sifariş verərkən ünvan hissəsini aşağıda qeyd olunan formada doldurmağınızı
-                        xahiş edirik.
-                    </p>
-                </div>
-                <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs">
-                        @for (int i = 0; i < countries.Count(); i++)
-                        {
-                            if (i == 0) { classname = "active"; }
-                            else { classname = ""; }
-                            <li class="nav-item">
-                                <a class="nav-link @classname" href="#" data-id="@countries[i].Name.ToLower()">@countries[i].Name.ToUpper()</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <div class="card-body">
-
-                    @for (int i = 0; i < countries.Count(); i++)
-                    {
-                        if (i == 0) { classname = "showonStart"; }
-                        else { classname = ""; }
-                        <div id="@ViewBag.countries[i].Name.ToLower()" class="@classname">
-
-
-                            <li class="nav-item">
-                                <a class="nav-link @classname" href="#" data-id="@ViewBag.countries[i].Name.ToLower()">@ViewBag.countries[i].Name.ToUpper()</a>
-                            </li>
-                            }
-                            @for (int j = 0; j < countries[i].countryInformations.Count(); j++)
-                            {
-
-                            }
-                          
-
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Ad Soyad:</label>
-                                    <span>Farid Cargo</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">State/Province/Region:</label>
-                                    <span>DE (Delaware)</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Address Line1:</label>
-                                    <span>700 CORNELL DR STE E16 u133927 MVR</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">ZIP/Postal Code:</label>
-                                    <span>19801</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Address Line2:</label>
-                                    <span>u133927 MVR</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">Country:</label>
-                                    <span>USA</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">City:</label>
-                                    <span>WILMINGTON</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">Phone number:</label>
-                                    <span>(302) 861-6062</span>
-                                </div>
-                            </div>
-                            <br />
-                        </div>
-                        <div id="turkey">
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Ad Soyad:</label>
-                                    <span>Farid Cargo</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">Semt:</label>
-                                    <span>Inkilap</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Adres 1:</label>
-                                    <span>İnkilap mh. Küçüksu cd. Yelkenciler sk. Vardar ap. NO :14/4 kod: u133927 Fazil Quliyev</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">ZIP/Post Kodu:</label>
-                                    <span>34768</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Il (Sehir):</label>
-                                    <span>İstanbul</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">Ulke:</label>
-                                    <span>Turkiye</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Ilce:</label>
-                                    <span>Ümraniye</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">TC kimlik:</label>
-                                    <span>66823284324</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Adres başlığı:</label>
-                                    <span>Farid Cargo</span>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label for="">Cep telefonu:</label>
-                                    <span>5358935606</span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <label for="">Vergi numarası:</label>
-                                    <span>6220881271</span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="orderInformations" class="information card">
-                    <div class="container">
-                        <div class="">
-                            <h3>odenilmemis sifarisler</h3>
-                            <button class="btn btn-primary">hamisini sec</button>
-                            <button class="btn btn-secondary">Ode</button>
-                        </div>
-                        <div>
-                            <table class="table table-sm table-responsive-sm">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Kategoriya</th>
-                                        <th scope="col">Say</th>
-                                        <th scope="col">Qiymet</th>
-                                        <th scope="col">Sifaris tarixi</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>CategoryName</td>
-                                        <td> 1 </td>
-                                        <td> 100 USD </td>
-                                        <td>00.00.2019</td>
-                                        <td>
-                                            <a href="" data-toggle="modal" data-target="#vieworderModal">etrafli</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>CategoryName</td>
-                                        <td> 3 </td>
-                                        <td> 18 USD </td>
-                                        <td>00.00.2019</td>
-                                        <td>
-                                            <a href="" data-toggle="modal" data-target="#vieworderModal">etrafli</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>CategoryName</td>
-                                        <td> 5 </td>
-                                        <td> 21 USD </td>
-                                        <td>00.00.2019</td>
-                                        <td>
-                                            <a href="" data-toggle="modal" data-target="#vieworderModal">etrafli</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-id="ordered">Sifaris edilib (0)</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-id="inforeignstock">Xarici anbarda (0)</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-id="ontheway">Yola dusub (0)</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-id="arrived">Catib (0)</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-id="delivered">Tehvil verilib (0)</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body position-relative">
-
-                        <div id="ordered" class="showonStart">
-
-                            <table class="table table-sm table-responsive-sm">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Kategoriya</th>
-                                        <th scope="col">Say</th>
-                                        <th scope="col">Qiymet</th>
-                                        <th scope="col">Sifaris tarixi</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>CategoryName</td>
-                                        <td> 1 </td>
-                                        <td> 100 USD </td>
-                                        <td>00.00.2019</td>
-                                        <td>
-                                            <a href="" data-toggle="modal" data-target="#vieworderModal">etrafli</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>CategoryName</td>
-                                        <td> 3 </td>
-                                        <td> 18 USD </td>
-                                        <td>00.00.2019</td>
-                                        <td>
-                                            <a href="" data-toggle="modal" data-target="#vieworderModal">etrafli</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>CategoryName</td>
-                                        <td> 5 </td>
-                                        <td> 21 USD </td>
-                                        <td>00.00.2019</td>
-                                        <td>
-                                            <a href="" data-toggle="modal" data-target="#vieworderModal">etrafli</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="inforeignstock">
-                            <!-- burda siyahi olacaq -->
-                        </div>
-                        <div id="ontheway">
-                            <!-- burda siyahi olacaq -->
-                        </div>
-                        <div id="arrived">
-                            <!-- burda siyahi olacaq -->
-                        </div>
-                        <div id="delivered">
-                            <!-- burda siyahi olacaq -->
-                        </div>
-                        <div class="modal fade" id="vieworderModal" tabindex="-1" role="dialog" aria-labelledby="vieworderModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="vieworderModalLabel">Sifarisin detallari</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <label>Link:</label>
-                                        <span class="form-control" name="link">fkjdhglskdfhglkdfhglkdsfhglhsldhglkdhfgdf</span>
-                                        <br>
-                                        <label>category:</label>
-                                        <span class="form-control" name="category">categoryName</span>
-                                        <br>
-                                        <label>quantity:</label>
-                                        <span class="form-control" name="quantity">0</span>
-                                        <br>
-                                        <label>price:</label>
-                                        <span class="form-control" name="price">0</span>
-                                        <label>Description:</label>
-                                        <p class="form-control" name="description">Lorem ipsum dolor sit amet, consectetur adipisicing elitm.</p>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="settingInformations" class="information">
-                    <form action="Account/Update" method="Post">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="settingsName">Ad</label>
-                                <input type="text" class="form-control" id="settingsName">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="settingsLastname">Soyad</label>
-                                <input type="text" class="form-control" id="settingsLastname">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="settingsEmal">Email</label>
-                                <input type="email" readonly class="form-control" id="settingsEmal" placeholder="email@farid.com">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="settingsPhone">telefon</label>
-                                <input type="number" class="form-control" id="settingsPhone">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="settingsIDCard">Sexsiyyet vesiqesinin nomresi</label>
-                                <input type="text" class="form-control" id="settingsIDCard">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="settingsFIN">FIN</label>
-                                <input type="text" class="form-control" id="settingsFIN">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="settingsBday">Dogum tarixi</label>
-                                <input type="date" class="form-control" id="settingsBday">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="settingsPassword">Yeni sifre</label>
-                                <input type="password" class="form-control" id="settingsPassword">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="settingsPassword">Yeni sifrenin tekrari</label>
-                                <input type="password" class="form-control" id="settingsPassword">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="settingsAddress">Unvan</label>
-                                <input type="text" class="form-control" id="settingsAddress">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Yadda saxla</button>
-                    </form>
-                </div>
-                <div id="BalanceInformations" class="information">
-                    <table class="table table-sm table-responsive-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Tarix</th>
-                                <th scope="col">Odenis (azn)</th>
-                                <th scope="col">Odenisin sebebi</th>
-                                <th scope="col">Balans (azn)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>00.00.2019</td>
-                                <td> 6 </td>
-                                <td> Balans artirma </td>
-                                <td>6</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>00.00.2019</td>
-                                <td> 8 </td>
-                                <td> Balans artirma </td>
-                                <td>14</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>00.00.2019</td>
-                                <td> -9 </td>
-                                <td> Sifaris </td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>00.00.2019</td>
-                                <td> -1 </td>
-                                <td> Baglama catdirilmasi </td>
-                                <td>4</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="inqueryInformations" class="information">
-                    <div class="jumbotronDiv">
-                        <h1>Sorgular</h1>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#inqueryModal" style="float:left; margin-bottom:20px">
-                            Yeni sorgu yarat
-                        </button>
-                    </div>
-                    <div class="row" style="clear:both">
-                        <table class="table table-sm table-responsive-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Tarix</th>
-                                    <th scope="col">basliq</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>00.00.2019</td>
-                                    <td> irad </td>
-                                    <td>
-                                        <a href="" data-toggle="modal" data-target="#inqueryModal">etrafli</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>00.00.2019</td>
-                                    <td> odenis ile bagli </td>
-                                    <td>
-                                        <a href="" data-toggle="modal" data-target="#inqueryModal">etrafli</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>00.00.2019</td>
-                                    <td> teklif </td>
-                                    <td>
-                                        <a href="" data-toggle="modal" data-target="#inqueryModal">etrafli</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>00.00.2019</td>
-                                    <td> sifaris ile bagli </td>
-                                    <td>
-                                        <a href="" data-toggle="modal" data-target="#inqueryModal">etrafli</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal fade" id="inqueryModal" tabindex="-1" role="dialog" aria-labelledby="inqueryModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="inqueryModalLabel">Yeni sorgu</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <select class="form-control form-control-sm" required>
-                                                <option>sorgunun tipi *</option>
-                                                <option>odenis ile bagli</option>
-                                                <option>sifaris ile bagli</option>
-                                                <option>catdirilma ile bagli</option>
-                                                <option>Irad</option>
-                                                <option>teklif</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-sm" required placeholder="basliq *">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-sm" placeholder="Link">
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea class="form-control form-control-sm" required placeholder="sorgunun metni *"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Bagla</button>
-                                    <button type="button" class="btn btn-primary">Gonder</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="MessageInformations" class="information">
-                    <div class="jumbotronDiv">
-                        <h1>Mesajlar</h1>
-                    </div>
-                    <div class="row">
-                        <table class="table table-sm table-responsive-sm">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Tarix</th>
-                                    <th scope="col">Mesaj</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>00.00.2019</td>
-                                    <td> irad </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>00.00.2019</td>
-                                    <td> odenis ile bagli </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>00.00.2019</td>
-                                    <td> teklif </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>00.00.2019</td>
-                                    <td> sifaris ile bagli </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+           @RenderBody();
+       
         </div>
-
-    </section>
+</div>
+</section>

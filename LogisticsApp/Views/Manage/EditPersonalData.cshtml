@@ -1,0 +1,121 @@
+﻿@model LogisticsApp.Models.EditPersonalDataViewModel
+@{
+   
+    Layout = "~/Views/Manage/Index.cshtml";
+    ViewBag.TitleSuffix = "Countries";
+    ViewBag.MessagesCounter = Model.MessageCounter;
+    ViewBag.InqueriesCounter = Model.InqueryCounter;
+    ViewBag.Balance = Model.Balance;
+    ViewBag.CustomerNumber = Model.CustomerID;
+}
+
+
+
+@using (Html.BeginForm("EditPersonalData", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Surname, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    <input type="email" name="Email" value="@Model.Email" readonly class="form-control" />
+
+                </div>
+            </div>
+           
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.IDCardNumber, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.IDCardNumber, new { @class = "form-control" })
+                </div>
+            </div>
+           
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.FINNumber, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.FINNumber, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Birthday, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control" })
+                </div>
+            </div>
+           
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.NewPassword, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Address, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Change" class="btn btn-primary" />
+        </div>
+    </div>
+}
+

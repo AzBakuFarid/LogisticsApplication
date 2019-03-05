@@ -168,7 +168,8 @@ namespace LogisticsApp.Controllers
                         Balance = 0.00,
                       };
                     using (ApplicationDbContext db=new ApplicationDbContext()) {
-                        user.CustomerNumber = db.Users.Max(m => m.CustomerNumber) + 1;
+                        if (db.Users.Count() < 1) user.CustomerNumber = 1000000;
+                        else user.CustomerNumber =  db.Users.Max(m => m.CustomerNumber) + 1;
                         
                     }
                     if (user.CustomerNumber == 0) {
@@ -471,7 +472,7 @@ namespace LogisticsApp.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Countries", "Manage");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

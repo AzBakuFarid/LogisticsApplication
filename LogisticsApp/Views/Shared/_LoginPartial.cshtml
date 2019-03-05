@@ -4,7 +4,7 @@
     {
 
         <li class="list-group-item bgColor-txtColor">
-            @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink(User.Identity.GetUserName(), "Countries", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
         <li  class="list-group-item bgColor-txtColor">@Html.ActionLink("Log off", "LogOff", "Account")</li>
 
