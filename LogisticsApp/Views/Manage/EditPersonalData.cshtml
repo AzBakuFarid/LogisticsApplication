@@ -1,6 +1,6 @@
 ﻿@model LogisticsApp.Models.EditPersonalDataViewModel
 @{
-   
+
     Layout = "~/Views/Manage/Index.cshtml";
     ViewBag.TitleSuffix = "Countries";
     ViewBag.MessagesCounter = Model.MessageCounter;
@@ -44,7 +44,7 @@
 
                 </div>
             </div>
-           
+
         </div>
         <div class="col-md-6 col-xs-12">
             <div class="form-group">
@@ -63,7 +63,7 @@
                     @Html.TextBoxFor(m => m.IDCardNumber, new { @class = "form-control" })
                 </div>
             </div>
-           
+
         </div>
         <div class="col-md-6 col-xs-12">
             <div class="form-group">
@@ -82,8 +82,18 @@
                     @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control" })
                 </div>
             </div>
-           
+
         </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+                @Html.LabelFor(m => m.OldPassword, new { @class = "col-md-12 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.OldPassword, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6 col-xs-12">
             <div class="form-group">
                 @Html.LabelFor(m => m.NewPassword, new { @class = "col-md-12 control-label" })
@@ -92,8 +102,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-6 col-xs-12">
             <div class="form-group">
                 @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-12 control-label" })
@@ -102,7 +110,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xs-12">
+    </div>
+    <div class="row">
+       
+        <div class="col-md-12 ">
             <div class="form-group">
                 @Html.LabelFor(m => m.Address, new { @class = "col-md-12 control-label" })
                 <div class="col-md-10">
@@ -111,7 +122,6 @@
             </div>
         </div>
     </div>
-
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Change" class="btn btn-primary" />

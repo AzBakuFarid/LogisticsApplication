@@ -25,7 +25,7 @@ namespace LogisticsApp.Models
         public static async Task<int> getUserUnAnsweredInqueriesAsync<T>(this T model, string userId) where T : GeneralContentViewModel
         {
             ApplicationDbContext db = new ApplicationDbContext();
-                return await Task<int>.Run(() => { return db.inqueries.Where(w => w.sender.Id == userId && w.isAnswered == false).Count(); });
+                return await Task<int>.Run(() => { return db.inqueries.Where(w => w.sender.Id == userId&&w.isAnswered==false).Count(); });
            
         }
         public static async Task<int> getUserCustomerNumberAsync<T>(this T model, string userId) where T : GeneralContentViewModel

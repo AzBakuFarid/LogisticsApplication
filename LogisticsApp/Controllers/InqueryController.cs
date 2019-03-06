@@ -4,44 +4,59 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using LogisticsApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace LogisticsApp.Controllers
 {
     [Authorize]
-    public class InquerieController : Controller
+    public class InqueryController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Inquerie
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var inqueries = db.inqueries.Include(i => i.messageType);
-            return View(inqueries.ToList());
+            var UserId = User.Identity.GetUserId();
+            var inqueries = db.inqueries.Where(w => w.sender.Id == UserId).OrderByDescending(o => o.CreatedDate).ToList();
+            var model = new GeneralContentViewModel();
+            model.Balance = await model.getUserBalanceAsync(UserId);
+            model.MessageCounter = await model.getUserUnreadMessagesAsync(UserId);
+            model.InqueryCounter = await model.getUserUnAnsweredInqueriesAsync(UserId);
+            model.CustomerID = await model.getUserCustomerNumberAsync(UserId);
+            ViewBag.inqueries = inqueries;
+            ViewBag.messageTypes = db.messageTypes.ToList();
+            ViewBag.MessageTypeId = new SelectList(db.messageTypes, "Id", "Name");
+            return PartialView(model);
         }
 
         // GET: Inquerie/Details/5
         public ActionResult Details(int? id)
         {
+            var UserId = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Inquery inquery = db.inqueries.Find(id);
-            if (inquery == null)
+            if (inquery == null || inquery.sender.Id != UserId)
             {
                 return HttpNotFound();
             }
-            return View(inquery);
+            var DateView = inquery.CreatedDate.Day + "." +
+                            inquery.CreatedDate.Month.ToString() + "." +
+                            inquery.CreatedDate.Year.ToString();
+            return Json(new { CreateDate = DateView, MessageType = inquery.messageType.Name, Text = inquery.Text }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Inquerie/Create
         public ActionResult Create()
         {
-            ViewBag.MessageTypeId = new SelectList(db.messageTypes, "Id", "Name");
-            return View();
+            ViewBag.MessageTypeId = new SelectList(db.messageTypes.ToList(), "Id", "Name");
+            return PartialView();
         }
 
         // POST: Inquerie/Create
@@ -49,17 +64,24 @@ namespace LogisticsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Text,CreatedDate,isAnswered,MessageTypeId")] Inquery inquery)
+        public ActionResult Create(InqueryViewModel model)
         {
+            
+
             if (ModelState.IsValid)
             {
+                string userId = User.Identity.GetUserId();
+                var user = db.Users.Single(s => s.Id == userId);//await ApplicationUserManager.FindByIdAsync(User.Identity.GetUserId());
+                
+                var inquery = new Inquery();
+                inquery.Text = model.Text;
+                inquery.MessageTypeId = model.MessageTypeId;
+                inquery.sender = user;
                 db.inqueries.Add(inquery);
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
 
-            ViewBag.MessageTypeId = new SelectList(db.messageTypes, "Id", "Name", inquery.MessageTypeId);
-            return View(inquery);
+            return RedirectToAction("Index");
         }
 
         // GET: Inquerie/Edit/5

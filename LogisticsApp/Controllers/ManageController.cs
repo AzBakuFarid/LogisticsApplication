@@ -85,11 +85,7 @@ namespace LogisticsApp.Controllers
             return PartialView(model);
         }
 
-        public async Task<ActionResult> getUMGC() // get User Managment General Content
-        {
-
-            return PartialView();
-         }
+       
         // GET: /Manage/ChangePassword
         public async Task<ActionResult> EditPersonalData()
         {
@@ -125,7 +121,7 @@ namespace LogisticsApp.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), null, model.NewPassword);
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -150,7 +146,7 @@ namespace LogisticsApp.Controllers
                     }
 
 
-                    return RedirectToAction("Index", new { Message = ManageMessageId.UserEditSuccess });
+                    return RedirectToAction("EditPersonalData", new { Message = ManageMessageId.UserEditSuccess });
                 }
 
 

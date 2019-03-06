@@ -4,9 +4,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using LogisticsApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace LogisticsApp.Controllers
 {
@@ -16,25 +18,41 @@ namespace LogisticsApp.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Message
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var messages = db.messages.Include(m => m.messageType);
-            return View(messages.ToList());
+            var UserId = User.Identity.GetUserId();
+            var messages = db.messages.Where(w => w.receiver.Id == UserId).OrderByDescending(o => o.CreatedDate).ToList();
+            var model = new GeneralContentViewModel();
+            model.Balance = await model.getUserBalanceAsync(UserId);
+            model.MessageCounter = await model.getUserUnreadMessagesAsync(UserId);
+            model.InqueryCounter = await model.getUserUnAnsweredInqueriesAsync(UserId);
+            model.CustomerID = await model.getUserCustomerNumberAsync(UserId);
+            ViewBag.messages = messages;
+            return PartialView(model);
         }
 
         // GET: Message/Details/5
         public ActionResult Details(int? id)
         {
+            var UserId = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Message message = db.messages.Find(id);
-            if (message == null)
+            if (message == null || message.receiver.Id != UserId)
             {
                 return HttpNotFound();
             }
-            return View(message);
+            if (!message.isRead) {
+                message.isRead = true;
+                db.SaveChanges();
+            }
+            
+            var DateView = message.CreatedDate.Day + "." +
+                           message.CreatedDate.Month.ToString() + "." +
+                           message.CreatedDate.Year.ToString();
+            return Json (new { CreateDate= DateView, MessageType= message.messageType.Name, Text = message.Text }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Message/Create

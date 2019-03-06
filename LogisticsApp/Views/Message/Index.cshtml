@@ -1,57 +1,84 @@
-﻿@model IEnumerable<LogisticsApp.Models.Message>
+﻿@model LogisticsApp.Models.GeneralContentViewModel
 
 @{
-    ViewBag.Title = "Index";
+    Layout = "~/Views/Manage/Index.cshtml";
+    ViewBag.TitleSuffix = "Messages";
+    ViewBag.MessagesCounter = Model.MessageCounter;
+    ViewBag.InqueriesCounter = Model.InqueryCounter;
+    ViewBag.Balance = Model.Balance;
+    ViewBag.CustomerNumber = Model.CustomerID;
+    IList<LogisticsApp.Models.Message> messages = ViewBag.messages;
+    int counter = 1;
+
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.messageType.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Text)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isRead)
-        </th>
-        <th></th>
-    </tr>
+<div id="MessageInformations" class="">
+    <div class="jumbotronDiv">
+        <h1>Mesajlar</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-1">#</div>
+        <div class="col-md-2">Tarix</div>
+        <div class="col-md-3">Basliq</div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4"></div>
+    </div>
+    <hr />
+    @foreach (var item in messages)
+    {
+        var DateView = item.CreatedDate.Day + "." +
+          item.CreatedDate.Month.ToString() + "." +
+         item.CreatedDate.Year.ToString();
+        <div class="row">
+            <div class="col-md-1">@(counter++)</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.messageType.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Text)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isRead)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+            <div class="col-md-2">
+                @DateView
+            </div>
+            <div class="col-md-3">
+                @item.messageType.Name
+            </div>
+            <div class="col-md-2">
+                @if (!item.isRead)
+                {
+                    <span class="unreadMessage">unread</span>
+                }
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="messageDetailsBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#MessageModal" id="@item.Id">oxu</button>
+            </div>
+        </div>
+    }
 
-</table>
+</div>
+<div class="modal fade" id="MessageModal" tabindex="-1" role="dialog" aria-labelledby="MessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="MessageModalLabel">Mesaj</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <span id="MessageModalDate" style="font-weight:bold; color:red"></span>
+                    </div>
+                    <div class="form-group">
+                        Movzu: <input id="MessageModalTitle" type="text" class="form-control form-control-sm" readonly>
+                    </div>
+                    <div class="form-group">
+                        Metn: <textarea id="MessageModalText" class="form-control form-control-sm" readonly></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bagla</button>
+             </div>
+        </div>
+    </div>
+</div>
+
+

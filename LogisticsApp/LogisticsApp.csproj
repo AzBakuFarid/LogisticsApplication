@@ -180,7 +180,7 @@
     <Compile Include="Controllers\CountrieController.cs" />
     <Compile Include="Controllers\FAQController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\InquerieController.cs" />
+    <Compile Include="Controllers\InqueryController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
