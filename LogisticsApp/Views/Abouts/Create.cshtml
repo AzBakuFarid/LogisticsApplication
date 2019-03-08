@@ -1,0 +1,41 @@
+﻿@model LogisticsApp.Models.Page.About
+@{
+
+    var htmlattr = new { @class = "form-control", @rows=20 };
+ }
+<div class="modal fade" id="AboutCreateModalLong" tabindex="-1" role="dialog" aria-labelledby="AboutCreateModalLongLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AboutCreateModalLongLabel">About</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Create", "Abouts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+
+                    @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model=>model.Text, htmlAttributes:htmlattr)
+                        @*<textarea name="text" class="form-control form-control-sm" rows="20"></textarea>*@
+                        @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">Create</button>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

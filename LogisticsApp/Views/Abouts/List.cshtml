@@ -1,0 +1,114 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.About>
+
+@{
+
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+    var message = ViewBag.AlertMessage;
+}
+
+
+<div id="AdminAbout">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th scope="col">Text</th>
+                <th scope="col">isActive</th>
+                <th scope="col">Editing</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string isactive = "";
+                string text = " ";
+                if (item.isActive) { isactive = "checked=checked"; }
+                else { isactive = ""; }
+                if (item.Text.Length > 60) { text = item.Text.Substring(0, 58); }
+                else { text = item.Text; }
+                <tr>
+
+                    <td>@text</td>
+                    <td>
+                        <div class="">
+                            <input type="checkbox" class="" data-id="@item.Id" @isactive id=@("checkbox" + item.Id)>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm AboutDetailsBtn" data-toggle="modal" data-target="#AboutDetailsModalLong" data-id="@item.Id">view/edit</button>
+                        <button class="btn btn-danger btn-sm AboutDeleteBtn" data-toggle="modal" data-target="#AboutDeleteModalLong" data-id="@item.Id">del</button>
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <button type="button" id="SaveActiveAboutBtn" class="btn btn-primary">Yadda saxla</button>
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#AboutCreateModalLong">Yenisini yarat</button>
+
+</div>
+
+<div class="modal fade" id="AboutDetailsModalLong" tabindex="-1" role="dialog" aria-labelledby="AboutDetailsModalLongLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AboutDetailsModalLongLabel">About</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               
+                    @using (Html.BeginForm("Edit", "Abouts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <input type="hidden" id="AboutDetailsModalId" name="id" value="" />
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Metn: </label>
+                            <div class="col-md-10">
+                                <textarea id="AboutDetailsModalText" name="text" class="form-control form-control-sm" rows="20"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" id="" class="btn btn-primary" data-id="" >Save</button>
+                        </div>
+                    }
+                </div>
+               
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AboutDeleteModalLong" tabindex="-1" role="dialog" aria-labelledby="AboutDeleteModalLongLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Delete", "Abouts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="AboutDeleteModalId" name="id" value="" />
+                    <div class="form-group">
+                       Bu metni silmekde eminsenmi ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Xeyr</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">Beli</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    Html.RenderAction("Create");
+}

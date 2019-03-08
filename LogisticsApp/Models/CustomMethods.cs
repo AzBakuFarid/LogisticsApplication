@@ -3,6 +3,7 @@ using LogisticsApp.Models.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -56,6 +57,7 @@ namespace LogisticsApp.Models
             return await Task<string>.Run(() => { return db.Users.First(w => w.Id == userId).Surname; });
 
         }
+        
 
 
 

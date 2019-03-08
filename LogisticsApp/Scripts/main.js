@@ -72,19 +72,51 @@
 
     })
 
-    //$("#createInqery").on("click", function () {
-    //    $.ajax({
-    //        url: "/Inquerie/Create/",
-    //        method: "POST",
-    //        data: { id: id }
-    //    }).done(function (res) {
-    //        console.log(res)
-    //        $("#InqueryDetailsModalDate").html(res.CreateDate);
-    //        $("#InqueryDetailsModalTitle").attr("value", res.MessageType);
-    //        $("#InqueryDetailsModalText").text(res.Text);
-    //        $("#InqueryDetailsModal").show();
-    //    })
-    //});
+    $("#alert button").on("click", function () {
+        $("#alert").hide();
+    })
+
+    $(".AboutDetailsBtn").on("click", function (e) {
+        var id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Abouts/Details/",
+            method: "POST",
+            data: { id: id }
+        }).done(function (res) {
+       
+            document.getElementById("AboutDetailsModalText").value=res.Text;
+            document.getElementById("AboutDetailsModalId").value = res.Id;
+            $("#AboutDetailsModal").show();
+            })
+       
+       
+    })
+
+    $("#AdminAbout input[type='checkbox']").on("click", function (e) {
+        var curr = $(this);
+        if (this.checked) {
+            $("input[type='checkbox']").prop("checked", false).removeAttr("checked");
+            curr.attr("checked", "");
+            this.checked = true;
+        }
+    })
+
+    $(".AboutDeleteBtn").on("click", function () {
+        var id = $(this).attr("data-id");
+        console.log(id);
+        $("#AboutDeleteModalId").val(id);
+    })
+
+    $("#SaveActiveAboutBtn").on("click", function () {
+        var id = $("#AdminAbout input[type='checkbox'][checked='checked']").attr("data-id");
+        console.log(id)
+        $.ajax({
+            url: "/Abouts/ChangeActivityStatus/",
+            method: "POST",
+            data: { id: id }
+        })
+    })
+
 
 
 

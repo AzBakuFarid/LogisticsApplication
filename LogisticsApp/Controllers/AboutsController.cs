@@ -23,9 +23,15 @@ namespace LogisticsApp.Controllers
             var about = db.abouts.FirstOrDefault(f => f.isActive == true);
             if (about == null)
             {
-                return HttpNotFound();
+                return View(new About { Text = " " });
             }
             return View(about);
+        }
+
+        public ActionResult List()
+        {
+
+            return View(db.abouts.ToList());
         }
 
         // GET: Abouts/Details/5
@@ -40,13 +46,13 @@ namespace LogisticsApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(about);
+            return Json(new { Text = about.Text, Id = about.Id }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Abouts/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView(new About());
         }
 
         // POST: Abouts/Create
@@ -54,50 +60,37 @@ namespace LogisticsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Text,isActive")] About about)
+        public ActionResult Create([Bind(Include = "Text")] About about)
         {
             if (ModelState.IsValid)
             {
                 db.abouts.Add(about);
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-
-            return View(about);
+            return RedirectToAction("List");
         }
-
-        // GET: Abouts/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            About about = db.abouts.Find(id);
-            if (about == null)
-            {
-                return HttpNotFound();
-            }
-            return View(about);
-        }
-
         // POST: Abouts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Text,isActive")] About about)
+        public ActionResult Edit(About model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(about).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(about);
-        }
 
-        // GET: Abouts/Delete/5
+                var about = db.abouts.FirstOrDefault(f => f.Id == model.Id);
+                about.Text = model.Text;
+                db.SaveChanges();
+                ViewBag.AlertMessage = "The text has succesfully changed";
+                return RedirectToAction("List");
+            }
+            ViewBag.AlertMessage = "Something gone wrong. Try again please!";
+            return RedirectToAction("List");
+        }
+        // POST: Abouts/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -109,18 +102,31 @@ namespace LogisticsApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(about);
-        }
 
-        // POST: Abouts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            About about = db.abouts.Find(id);
             db.abouts.Remove(about);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
+        }
+
+        [HttpPost]
+        public ActionResult ChangeActivityStatus(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var abouts = db.abouts.ToList();
+            if (!abouts.Any(a => a.Id == id)) {
+                return HttpNotFound();
+            }
+            foreach (var item in abouts)
+            {
+                if (item.Id == id) { item.isActive = true; }
+                else { item.isActive = false; }
+            }
+
+            db.SaveChanges();
+            return RedirectToAction("List");
         }
 
         protected override void Dispose(bool disposing)
