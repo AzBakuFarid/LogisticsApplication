@@ -16,7 +16,8 @@
         mobile = Model.Mobilenumber;
         email = Model.Email;
     }
-
+    ViewBag.ContactFB = Model.Facebook == null ? "#" : Model.Facebook;
+    ViewBag.ContactIG = Model.Instagram == null ? "#" : Model.Instagram;
 }
 
 

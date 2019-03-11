@@ -305,9 +305,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Carusels\Create.cshtml" />
-    <Content Include="Views\Carusels\Delete.cshtml" />
     <Content Include="Views\Carusels\Details.cshtml" />
-    <Content Include="Views\Carusels\Edit.cshtml" />
     <Content Include="Views\Home\PartialCarusel.cshtml" />
     <Content Include="Views\Steps\Create.cshtml" />
     <Content Include="Views\Steps\Delete.cshtml" />
@@ -342,6 +340,8 @@
     <Content Include="Views\Home\AdminEmpty.cshtml" />
     <Content Include="Views\Abouts\List.cshtml" />
     <Content Include="Views\Abouts\Create.cshtml" />
+    <Content Include="Views\Contact\List.cshtml" />
+    <Content Include="Views\Carusels\List.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

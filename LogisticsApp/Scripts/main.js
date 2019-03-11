@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
 
     $(".card-header a").on("click", function () {
         $(".card-header a").removeClass("active");
@@ -7,16 +8,12 @@
         $(".card-body>div").hide();
         $("#" + div).show();
     })
+
     var acc = document.getElementsByClassName("accordion");
     var i;
-
     for (i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function () {
-            /* Toggle between adding and removing the "active" class,
-            to highlight the button that controls the panel */
             this.classList.toggle("active");
-
-            /* Toggle between hiding and showing the active panel */
             var panel = this.nextElementSibling;
             if (panel.style.display === "block") {
                 panel.style.display = "none";
@@ -38,7 +35,7 @@
 
     $(".messageDetailsBtn").on("click", function () {
 
-        var id = $(this).attr("id");
+        let id = $(this).attr("id");
 
         $.ajax({
             url: "/Message/Details/",
@@ -56,7 +53,7 @@
 
     $(".inqueryDetailsBtn").on("click", function () {
 
-        var id = $(this).attr("id");
+        let id = $(this).attr("id");
 
         $.ajax({
             url: "/Inquerie/Details/",
@@ -77,48 +74,80 @@
     })
 
     $(".AboutDetailsBtn").on("click", function (e) {
-        var id = $(this).attr("data-id");
+        let id = $(this).attr("data-id");
         $.ajax({
             url: "/Abouts/Details/",
             method: "POST",
             data: { id: id }
         }).done(function (res) {
-       
-            document.getElementById("AboutDetailsModalText").value=res.Text;
+
+            document.getElementById("AboutDetailsModalText").value = res.Text;
             document.getElementById("AboutDetailsModalId").value = res.Id;
             $("#AboutDetailsModal").show();
-            })
-       
-       
-    })
+        })
 
+
+    })
     $("#AdminAbout input[type='checkbox']").on("click", function (e) {
-        var curr = $(this);
+        let curr = $(this);
         if (this.checked) {
             $("input[type='checkbox']").prop("checked", false).removeAttr("checked");
             curr.attr("checked", "");
             this.checked = true;
         }
     })
-
     $(".AboutDeleteBtn").on("click", function () {
-        var id = $(this).attr("data-id");
+        let id = $(this).attr("data-id");
         console.log(id);
         $("#AboutDeleteModalId").val(id);
     })
-
     $("#SaveActiveAboutBtn").on("click", function () {
-        var id = $("#AdminAbout input[type='checkbox'][checked='checked']").attr("data-id");
+        let id = $("#AdminAbout input[type='checkbox']:checked").attr("data-id");
         console.log(id)
         $.ajax({
             url: "/Abouts/ChangeActivityStatus/",
             method: "POST",
             data: { id: id }
+        }).done(function (res) {
+            location.reload();
         })
     })
 
+    $("#SaveActiveCaruselsBtn").on("click", function () {
+        let selecteds = [];
+        $.each($("#AdminCarusel input[type='checkbox']:checked"), function () {
+            selecteds.push($(this).attr("data-id"));
+        });
+
+        $.ajax({
+            url: "/Carusels/ChangeActivityStatus/",
+            method: "POST",
+            dataType: 'json',
+            data: { id: selecteds }
+        }).done(function (res) {
+            window.location.href = res;
+        })
+    })
+    $(".CaruselDetailsBtn").on("click", function (e) {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Carusels/Details/",
+            method: "POST",
+            data: { id: id }
+        }).done(function (res) {
+            document.getElementById("CaruselDetailsModalId").value = res.Id;
+            document.getElementById("CaruselDetailsModalTitle").value = res.Title;
+            document.getElementById("CaruselDetailsModalText").value = res.Text;
+            $("#CaruselDetailsModalImage").attr("src", res.Image);
+            $("#CaruselDetailsModalLong").show();
+        })
 
 
+    })
+    $(".CaruselDeleteBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $("#CaruselDeleteModalId").val(id);
+    })
 
 
 

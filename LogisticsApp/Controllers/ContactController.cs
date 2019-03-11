@@ -22,102 +22,47 @@ namespace LogisticsApp.Controllers
         {
             return View(db.contacts.FirstOrDefault());
         }
-
-        // GET: Contact/Details/5
-        public ActionResult Details(int? id)
+        
+        public ActionResult List()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contact contact = db.contacts.Find(id);
-            if (contact == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contact);
+            return View(db.contacts.FirstOrDefault());
         }
 
-        // GET: Contact/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Contact/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,isActive,Address,Phonenumber,Mobilenumber,Email")] Contact contact)
+        public ActionResult Edit([Bind(Include = "Address,Phonenumber,Mobilenumber,Email,Facebook,Instagram")] Contact model)
         {
             if (ModelState.IsValid)
             {
-                db.contacts.Add(contact);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var contact = db.contacts.FirstOrDefault();
+                if (contact.Equals(null))
+                {
+                    contact = new Contact();
+                    contact.Address = model.Address;
+                    contact.Phonenumber = model.Phonenumber;
+                    contact.Mobilenumber = model.Phonenumber;
+                    contact.Facebook = model.Facebook;
+                    contact.Instagram = model.Instagram;
+                    contact.Email = model.Email;
+                    db.contacts.Add(contact);
+                    
+                }
+                else {
+                    contact.Address = model.Address;
+                    contact.Phonenumber = model.Phonenumber;
+                    contact.Mobilenumber = model.Mobilenumber;
+                    contact.Facebook = model.Facebook;
+                    contact.Instagram = model.Instagram;
+                    contact.Email = model.Email;
+                    
+                }
+                   db.SaveChanges();
+           
+                
             }
-
-            return View(contact);
+            return RedirectToAction("List");
         }
-
-        // GET: Contact/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contact contact = db.contacts.Find(id);
-            if (contact == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contact);
-        }
-
-        // POST: Contact/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,isActive,Address,Phonenumber,Mobilenumber,Email")] Contact contact)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(contact).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(contact);
-        }
-
-        // GET: Contact/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contact contact = db.contacts.Find(id);
-            if (contact == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contact);
-        }
-
-        // POST: Contact/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Contact contact = db.contacts.Find(id);
-            db.contacts.Remove(contact);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
