@@ -287,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Img\country\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -305,7 +306,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Carusels\Create.cshtml" />
-    <Content Include="Views\Carusels\Details.cshtml" />
     <Content Include="Views\Home\PartialCarusel.cshtml" />
     <Content Include="Views\Steps\Create.cshtml" />
     <Content Include="Views\Steps\Delete.cshtml" />
@@ -342,6 +342,9 @@
     <Content Include="Views\Abouts\Create.cshtml" />
     <Content Include="Views\Contact\List.cshtml" />
     <Content Include="Views\Carusels\List.cshtml" />
+    <Content Include="Views\FAQ\List.cshtml" />
+    <Content Include="Views\FAQ\Create.cshtml" />
+    <Content Include="Views\Countrie\List.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

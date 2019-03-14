@@ -1,0 +1,56 @@
+﻿@model IEnumerable<LogisticsApp.Models.General.Country>
+
+@{
+
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+
+}
+
+<div id="AdminCountry">
+    <div class="row">
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#CountryCreateModal"> Add new country</button>
+    </div>
+    <br /> <br /> 
+    <ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
+        @foreach (var item in Model)
+        {
+            <li class="nav-item">
+                <a class="nav-link btn btn-outline-primary countryInfoBtn" id="pills-home-tab" data-toggle="pill" href="" role="tab" aria-controls="pills-home" data-id="@item.Id" aria-selected="true">@item.Name</a>
+            </li>
+        }
+    </ul>
+    <div id="AdminCountryInformations">
+
+    </div>
+</div>    
+<div class="modal fade" id="CountryCreateModal" tabindex="-1" role="dialog" aria-labelledby="CountryCreateModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CountryCreateModalLabel">About</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Create", "Countrie", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        Olkenin adi : <input class = "form-control" type="text" name="name" value="" placeholder="yaratmaq istediyin olkenin adini daxil et" />
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">Create</button>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

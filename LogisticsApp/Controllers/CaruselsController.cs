@@ -68,26 +68,12 @@ namespace LogisticsApp.Controllers
 
                 db.carusel.Add(carusel);
                 db.SaveChanges();
+                ViewBag.AlertMessage = "creation has ended succesfully";
                 return RedirectToAction("List");
             }
-
+            ViewBag.AlertMessage = "Something gone wrong. Try again please!";
             return RedirectToAction("List");
         }
-
-        // GET: Carusels/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Carusel carusel = db.carusel.Find(id);
-        //    if (carusel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(carusel);
-        //}
 
         // POST: Carusels/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -121,21 +107,6 @@ namespace LogisticsApp.Controllers
             ViewBag.AlertMessage = "Something gone wrong. Try again please!";
             return RedirectToAction("List");
         }
-
-        // GET: Carusels/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Carusel carusel = db.carusel.Find(id);
-        //    if (carusel == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(carusel);
-        //}
 
         // POST: Carusels/Delete/5
         [HttpPost, ActionName("Delete")]

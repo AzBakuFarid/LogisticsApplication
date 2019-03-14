@@ -149,6 +149,54 @@ $(document).ready(function () {
         $("#CaruselDeleteModalId").val(id);
     })
 
+    $("#SaveActiveForumsBtn").on("click", function () {
+        let selecteds = [];
+        $.each($("#AdminForum input[type='checkbox']:checked"), function () {
+            selecteds.push($(this).attr("data-id"));
+        });
+
+        $.ajax({
+            url: "/FAQ/ChangeActivityStatus/",
+            method: "POST",
+            dataType: 'json',
+            data: { id: selecteds }
+        }).done(function (res) {
+            window.location.href = res;
+        })
+    })
+    $(".ForumDetailsBtn").on("click", function (e) {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/FAQ/Details/",
+            method: "POST",
+            data: { id: id }
+        }).done(function (res) {
+            document.getElementById("ForumDetailsModalId").value = res.Id;
+            document.getElementById("ForumDetailsModalQuestion").value = res.Question;
+            document.getElementById("ForumDetailsModalAnswer").value = res.Answer;
+            $("#ForumDetailsModalLong").show();
+        })
+
+
+    })
+    $(".ForumDeleteBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $("#ForumDeleteModalId").val(id);
+    })
+
+    $(".countryInfoBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Countrie/Details/",
+            method: "POST",
+            data: { id: id }
+        }).done(function (res) {
+            $("#AdminCountryInformations").html(res);
+        })
+
+    })
+
+
 
 
 

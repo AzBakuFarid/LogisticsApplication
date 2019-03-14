@@ -1,0 +1,45 @@
+﻿@model LogisticsApp.Models.Page.ForumViewModel
+
+
+<div class="modal fade" id="ForumCreateModal" tabindex="-1" role="dialog" aria-labelledby="ForumCreateModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ForumCreateModalLabel">About</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Create", "FAQ", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Question, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(model => model.Question, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Question, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Answer, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Answer, htmlAttributes: new { @class = "form-control", rows = "20" })
+                            @Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">Create</button>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

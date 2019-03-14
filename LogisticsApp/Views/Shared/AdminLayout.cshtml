@@ -17,11 +17,11 @@
     @Styles.Render("~/Content/css")
 </head>
 <body>
-    @if ((string)@ViewBag.AlertMessage!=null)
+    @if ((string)TempData["AlertMessage"]!= null)
     {<div class="container" id="alert" style="text-align:center" >
-        <div class="alert alert-danger"  role="alert" style="display:inline-block">
-            @ViewBag.AlertMessage
-        </div> 
+         <div class="alert alert-danger" role="alert" style="display:inline-block">
+             @TempData["AlertMessage"]
+         </div> 
         <button class="btn btn-danger">X</button>
     </div>
     }
