@@ -185,6 +185,7 @@
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\StepsController.cs" />
     <Compile Include="Controllers\TaariffController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,6 +193,8 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\General\CountryInformation.cs" />
+    <Compile Include="Models\General\Status.cs" />
+    <Compile Include="Models\General\Valuta.cs" />
     <Compile Include="Models\Inquery.cs" />
     <Compile Include="Models\Market.cs" />
     <Compile Include="Models\CustomMethods.cs" />
@@ -318,11 +321,11 @@
     <Content Include="Views\Market\Edit.cshtml" />
     <Content Include="Views\Market\Index.cshtml" />
     <Content Include="Views\Market\PartialCategories.cshtml" />
-    <Content Include="Views\Inquerie\Create.cshtml" />
-    <Content Include="Views\Inquerie\Delete.cshtml" />
-    <Content Include="Views\Inquerie\Details.cshtml" />
-    <Content Include="Views\Inquerie\Edit.cshtml" />
-    <Content Include="Views\Inquerie\Index.cshtml" />
+    <Content Include="Views\Inquery\Create.cshtml" />
+    <Content Include="Views\Inquery\Delete.cshtml" />
+    <Content Include="Views\Inquery\Details.cshtml" />
+    <Content Include="Views\Inquery\Edit.cshtml" />
+    <Content Include="Views\Inquery\Index.cshtml" />
     <Content Include="Views\Message\Create.cshtml" />
     <Content Include="Views\Message\Delete.cshtml" />
     <Content Include="Views\Message\Details.cshtml" />
@@ -333,7 +336,6 @@
     <Content Include="Views\Countrie\Details.cshtml" />
     <Content Include="Views\Countrie\Edit.cshtml" />
     <Content Include="Views\Countrie\Index.cshtml" />
-    <Content Include="Views\Manage\getUMGC.cshtml" />
     <Content Include="Views\Manage\Countries.cshtml" />
     <Content Include="Views\Shared\AdminLayout.cshtml" />
     <Content Include="Views\Home\AdminPanel.cshtml" />
@@ -345,6 +347,12 @@
     <Content Include="Views\FAQ\List.cshtml" />
     <Content Include="Views\FAQ\Create.cshtml" />
     <Content Include="Views\Countrie\List.cshtml" />
+    <Content Include="Views\Order\Create.cshtml" />
+    <Content Include="Views\Order\Delete.cshtml" />
+    <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\OrderCreateLinePartial.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

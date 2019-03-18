@@ -214,14 +214,13 @@ a {
     border:solid 1px rgba(153,153,153,0.4);
     margin: 5px 0;
   }
-  
-  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-  .active, .accordion:hover {
+
+   .accordion:hover {
     background-color: rgb(18, 18, 70);
     color: white;
   }
   
-  /* Style the accordion panel. Note: hidden by default */
+
   .panel {
     padding: 18px;
     background-color: white;

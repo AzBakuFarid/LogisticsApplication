@@ -1,0 +1,127 @@
+﻿@model LogisticsApp.Models.OrderViewModel
+
+@{
+    Layout = "~/Views/Manage/Index.cshtml";
+    ViewBag.TitleSuffix = "Order creation";
+    ViewBag.MessagesCounter = Model.MessageCounter;
+    ViewBag.InqueriesCounter = Model.InqueryCounter;
+    ViewBag.Balance = Model.Balance;
+    ViewBag.CustomerNumber = Model.CustomerID;
+    IList<LogisticsApp.Models.General.Country> countries = TempData["Countries"] as IList<LogisticsApp.Models.General.Country>;
+
+
+
+    int counter = 1;
+    string classname = "";
+}
+
+<div id="createOrder" style="font-size:14px">
+
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        @foreach (var item in countries)
+        {
+            classname = (counter == 1) ? "active" : "";
+            counter++;
+        <li class="nav-item">
+            <a class="nav-link @classname" id="pills-@item.Name-tab" data-toggle="pill" href="#pills-@item.Name" role="tab" aria-controls="pills-@item.Name"
+               aria-selected="true">@item.Name</a>
+        </li>
+        }
+        @{
+            counter = 1;
+         }
+      
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        @foreach (var item in countries)
+        {
+            
+            classname = (counter == 1) ? "active show" : "";
+            counter++;
+            <div class="tab-pane fade @classname" id="pills-@item.Name" role="tabpanel" aria-labelledby="pills-@item.Name-tab">
+                @{
+                    ViewBag.CountryId = item.Id;
+                    Html.RenderPartial("OrderCreateLinePartial", Model);
+                }
+            </div>
+
+    }
+        
+
+    </div>
+
+</div>
+
+
+
+
+
+
+@*@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Link, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Link, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.isPaid, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.isPaid)
+                    @Html.ValidationMessageFor(model => model.isPaid, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.isUrgent, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.isUrgent)
+                    @Html.ValidationMessageFor(model => model.isUrgent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}*@
+

@@ -109,6 +109,7 @@ namespace LogisticsApp.Controllers
             model.InqueryCounter = await model.getUserUnAnsweredInqueriesAsync(userId);
             model.CustomerID = await model.getUserCustomerNumberAsync(userId);
             return PartialView(model);
+           
         }
 
 
@@ -292,9 +293,6 @@ namespace LogisticsApp.Controllers
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
-
-
-
 
         //
         // POST: /Manage/SetPassword

@@ -196,9 +196,26 @@ $(document).ready(function () {
 
     })
 
-
-
-
+    $(".addNewLinkToOrder").on("click", function () {
+        var where = $(this).parent().parent();
+        var btn = where.children().last();
+        var row = where.children()[1].outerHTML;
+        if (where.find($("div[id^='orderlinkrow']")).length < 10) {
+            btn.remove();
+            var id = where.children().last().attr("id");
+            var counter = Number(id.substring(id.length - 1));
+            counter++;
+            where.append(row).children().last().attr("id", "orderlinkrow" + counter)
+            where.children().last().find(".deleteOrderBtn").attr("data-counter", "#orderlinkrow" + counter).removeAttr("disabled")
+            where.append(btn)
+        }
+        else { console.log("error") }
+    })
+    $(document).on("click", ".deleteOrderBtn", function () {
+        var item = $(this).attr("data-counter");
+        $(item).remove();
+    })    
+  
 
 
 })

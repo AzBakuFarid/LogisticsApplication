@@ -63,6 +63,8 @@ namespace LogisticsApp.Models
         public DbSet<Carusel> carusel { get; set; }
         public DbSet<Step> steps { get; set; }
         public DbSet<Market> markets { get; set; }
+        public DbSet<Status> statuses { get; set; }
+        public DbSet<Valuta> valutas { get; set; }
 
     }
 }

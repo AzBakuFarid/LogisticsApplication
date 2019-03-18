@@ -1,0 +1,76 @@
+﻿@model LogisticsApp.Models.OrderViewModel
+    @{ 
+        IList<LogisticsApp.Models.General.Valuta> valutas = TempData["Valutas"] as IList<LogisticsApp.Models.General.Valuta>;
+        IList<LogisticsApp.Models.General.Category> categories = TempData["Categories"] as IList<LogisticsApp.Models.General.Category>;
+
+    }
+
+@using (Html.BeginForm("Create", "Order", FormMethod.Post,
+                             new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" value="@ViewBag.CountryId" name="CountryId"/>
+
+<div class="container">
+    <div class="row">
+        <button type="button" id="" class="btn btn-warning addNewLinkToOrder">+ yeni link</button>
+     
+    </div>
+
+    <div class="row" id="orderlinkrow1">
+        <div class="col-md-12"><hr /></div> 
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="link">Link:</label>
+                    <input type="text" name="link" required class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="price">qiymet:</label>
+                    <input type="number" name="price" required class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="valutaId">Valyuta:</label>
+                    <select name="valutaId" required class="form-control">
+                        @foreach (var item in valutas)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="Quantity">Say:</label>
+                    <input type="number" name="Quantity" required class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="CategoryId">Category:</label>
+                    <select name="CategoryId" required class="form-control">
+                        @foreach (var item in categories)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label for="price">Qeyd:</label>
+                    <textarea class="form-control" name="Description" id="" required placeholder="Almaq istədiyiniz məhsulun rəngi, ölçüsü və sayını mütləq qeyd edin"></textarea>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-2">
+               <button type="button" class="btn btn-danger deleteOrderBtn" data-counter="#orderlinkrow1" disabled="disabled" style="font-size:10px; margin-top:100%">X</button>
+            </div>
+
+        </div>
+
+    <div class="row">
+        <div class="col-md-12"><hr></div>
+        <div class="col-md-3">
+            @Html.EditorFor(model => model.isUrgent ) <label for="isUrgent">Suretli sifaris</label>
+        </div>
+        <div class="offset-7">
+            <button type="submit" class="btn btn-primary">sifaris et</button>
+        </div>
+    </div>
+</div>
+}

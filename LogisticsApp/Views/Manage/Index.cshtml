@@ -19,7 +19,7 @@
                     <span class="btn btn-secondary nav-link">Musteri kodu: @ViewBag.CustomerNumber</span>
                 </li>
                 <li class="nav-item" style="margin:5px">
-                    <a href="/Account/Order" class="btn btn-danger nav-link">Sifaris et</a>
+                    <a href="/Order/Create" class="btn btn-danger nav-link">Sifaris et</a>
                 </li>
                 <li class="nav-item" style="margin:5px">
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#declarationModal" style="font-size:20px;">
@@ -213,20 +213,16 @@
         <div class="col-md-4">
             <div class="list-group">
                 @Html.ActionLink("Xaricdeki unvanlar", "Countries", "Manage", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action list-active" })
-                @*<a href="/Manage/Countries" class="list-group-item list-group-item-action list-active">
-            Xaricdeki unvanlar
-        </a>*@
-                <a href="1231" class="list-group-item list-group-item-action">Sifarislerim</a>
+                @Html.ActionLink("Sifarislerim", "Index", "Order", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action list-active" })
                 @Html.ActionLink("Tenzimlemeler", "EditPersonalData", "Manage", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action" })
 
-                @*<a href="/Manage/EditPersonalData" class="list-group-item list-group-item-action">Tenzimlemeler</a>*@
                 <a href="#" class="list-group-item list-group-item-action">Balans</a>
 
                 <a href="/Message/Index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     Mesajlar
                     <span class="badge badge-primary badge-pill">@ViewBag.MessagesCounter</span>
                 </a>
-                <a href="/Inquerie/Index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <a href="/Inquery/Index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     Sorgular
                     <span class="badge badge-primary badge-pill">@ViewBag.InqueriesCounter</span>
                 </a>
