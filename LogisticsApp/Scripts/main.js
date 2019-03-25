@@ -1,5 +1,34 @@
 ﻿
 $(document).ready(function () {
+    window.onscroll = function () { scrollFunction() };
+    function scrollFunction() {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            document.getElementById("goUp").style.display = "block";
+        } else {
+            document.getElementById("goUp").style.display = "none";
+        }
+    }
+
+    $("#Calculate").on("click", function () {
+        let model = {
+            CountryId: $("#calculator #countryId").val(),
+            BundleCount: $("#calculator #BundleCount").val(),
+            Length: $("#calculator #Length").val(),
+            Width: $("#calculator #Width").val(),
+            Height: $("#calculator #Height").val(),
+            Weight: $("#calculator #Weight").val()
+        }
+        console.log(model)
+        $.ajax({
+            url: "/Taariff/Calculator/",
+            method: "Post",
+            data: { model:model }
+        }).done(function (res) {
+            console.log(res)
+            $("#calculator #calculatorResult").text(res.Value);
+        })
+
+    })
 
     $(".card-header a").on("click", function () {
         $(".card-header a").removeClass("active");
@@ -56,17 +85,23 @@ $(document).ready(function () {
         let id = $(this).attr("id");
 
         $.ajax({
-            url: "/Inquerie/Details/",
+            url: "/Inquery/Details/",
             method: "POST",
             data: { id: id }
         }).done(function (res) {
-            console.log(res)
-            $("#InqueryDetailsModalDate").html(res.CreateDate);
-            $("#InqueryDetailsModalTitle").attr("value", res.MessageType);
-            $("#InqueryDetailsModalText").text(res.Text);
+            $("#InqueryDetailsModal .modal-body").html(res);
             $("#InqueryDetailsModal").show();
         })
 
+    })
+    $("#inqueryInformations button[data-target='#InqueryCreateModal'").on("click", function () {
+        $.ajax({
+            url: "/Inquery/Create/",
+            method: "GET",
+        }).done(function (res) {
+            $("#InqueryCreateModal .modal-body").html(res);
+            $("#InqueryCreateModal").modal("show");
+        })
     })
 
     $("#alert button").on("click", function () {
@@ -214,8 +249,79 @@ $(document).ready(function () {
     $(document).on("click", ".deleteOrderBtn", function () {
         var item = $(this).attr("data-counter");
         $(item).remove();
-    })    
-  
+    })
+    $("#orderInformations .card-header a ").on("click", function () {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Order/ordersPerSteps/",
+            method: "POST",
+            data: { id: id }
+        }).done(function (res) {
+            console.log(res)
+            $("#ordersPerSteps").html(res);
+        })
+    })
+    $(document).on("click", "button.OrderDetailsBtn", function (e) {
+
+        let id = $(this).attr("data-id");
+        console.log(id)
+        $.ajax({
+            url: "/Order/Details/",
+            method: "POST",
+            data: { id: id }
+        }).done(function (res) {
+            $("#OrderDetailsModalLong .modal-body").html(res);
+            $("#OrderDetailsModalLong").modal("show");
+        })
+    })
+    $(".OrderDeleteBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        console.log(id)
+        $("#OrderDeleteModalId").val(id);
+    })
+    $("#selectAllUnpaids").on("click", function () {
+        if ($(".UsersUnpaidOrders:checked").length == $(".UsersUnpaidOrders").length) {
+            $(".UsersUnpaidOrders").prop("checked", false).removeAttr("checked")
+            $("#payForOrder").attr("disabled", "")
+        }
+        else {
+            $(".UsersUnpaidOrders").prop("checked", true).attr("checked", "")
+            $("#payForOrder").removeAttr("disabled")
+        }
+    })
+    $(document).on("change", ".UsersUnpaidOrders", function (e) {
+        
+        if ($(".UsersUnpaidOrders:checked").length > 0) {
+            $("#payForOrder").removeAttr("disabled")
+        }
+        else { $("#payForOrder").attr("disabled","")}
+    })
+    $("#payForOrder").on("click", function () {
+        let selecteds = [];
+        let sumprice = 0;
+        $.each($("#orderInformations .UsersUnpaidOrders:checked"), function () {
+            selecteds.push($(this).attr("data-id"));
+            sumprice += Number($(this).attr("data-sumPrice"))
+            
+        });
+        sumprice = Number(sumprice.toFixed(2));
+        let final=(sumprice+Number((sumprice*5/100).toFixed(2))).toFixed(2)
+        $("#OrderPaymentModal #OrderPaymentModalText").html("<p>Secdiyiniz sifarislerin deyeri <span style='font-size:20px; color:red'>" + sumprice + "</span> manatdir. " +
+            "Nezerinize catdiriq ki, saytimizda mehsulun sifarisli odenisi ucun 5% mebleginde xidmet haqqi odenilmelidir(cemi " +
+            "<span style='font-size:20px; color:red'>" + final + "</span> manat).</p>"+
+            "<p>Bundan elave, sifarisin tecili olmasini secmisinizse hemin meblegin 2%-i hecminde elave odenis etmeli olacaqsiniz.</p> " +
+            "<p>Balansinizda kifayet qeder pulun oldugundan emin olduqdan sonra ODEMEK duymesini sixa bilersiniz. "+
+            "Eks halda evvelce <a href = '/Payment/AddToBalance' style='color:blue;'> bu linkden</a> istifade ederek balansinizi " +
+            "artirmaginiz xahis olunur </p>")
+        for (let i = 0; i < selecteds.length; i++)
+        {
+            $("#OrderPaymentModalId").append("<input type='hidden' name='selecteds' value='" + selecteds[i] + "' />")
+        }
+    })
+
+
+
+
 
 
 })

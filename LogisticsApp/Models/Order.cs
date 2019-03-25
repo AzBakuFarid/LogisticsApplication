@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -9,16 +10,20 @@ namespace LogisticsApp.Models
 {
     public class Order
     {
+        public Order()
+        {
+            CreatedDate = DateTime.Now; //ToString("yyyy.MM.dd HH:mm:ss");
+        }
         public int Id { get; set; }
         public string Link { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        
+
         public bool isPaid { get; set; }
         public bool isUrgent { get; set; }
         public string Description { get; set; }
-        
 
         public int CategoryId { get; set; }
         public string ApplicationUserId { get; set; }
@@ -55,4 +60,25 @@ namespace LogisticsApp.Models
         [Required]
         public int ValutaId { get; set; }
     }
+    public class OrderCreateModel 
+    {
+        [Required]
+        public string[] Link { get; set; }
+        [Required]
+        public double[] Price { get; set; }
+        [Required]
+        public int[] Quantity { get; set; }
+        [Required]
+        public string[] Description { get; set; }
+        [Required]
+        public int[] CategoryId { get; set; }
+        [Required]
+        public int[] ValutaId { get; set; }
+        [Required]
+        public bool? isUrgent { get; set; }
+        [Required]
+        public int countryId { get; set; }
+
+    }
+
 }

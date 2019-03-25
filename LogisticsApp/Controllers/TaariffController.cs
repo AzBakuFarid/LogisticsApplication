@@ -124,6 +124,29 @@ namespace LogisticsApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Calculator(CalculatorModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                double result = 0;
+                var taariff = db.taariffs.Where(w => w.CountryId == model.CountryId&&w.isActive==true).OrderBy(o=>o.Weight).ToList();
+                if (model.Height > 100 || model.Length > 100 || model.Width > 100)
+                {
+                    // bu hesablama sehf de ola biler... cunki bunun duzgun hesablanmasini bilmirem...
+                    result = Math.Round((model.Height *model.Length*model.Width/6000).CalculateBundlePrice(taariff) *model.BundleCount, 2);
+                }
+                else {
+                    result = Math.Round(model.Weight.CalculateBundlePrice(taariff) * model.BundleCount, 2);
+                }
+                return Json(new { Value = result+" " }, JsonRequestBehavior.AllowGet);
+            }
+
+
+            return Json(new { Value ="0.00 "  }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -34,14 +34,13 @@
 
     @foreach (var item in inqueries)
     {
-        var DateView = item.CreatedDate.Day + "." +
-          item.CreatedDate.Month.ToString() + "." +
-         item.CreatedDate.Year.ToString();
-        <div class="row">
+
+        <div class="row"> 
+
             <div class="col-md-1">@(counter++)</div>
 
             <div class="col-md-2">
-                @DateView
+                @item.CreatedDate.ToString("dd.MM.yyyy")
             </div>
             <div class="col-md-3">
                 @item.messageType.Name
@@ -69,17 +68,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <span id="InqueryDetailsModalDate" style="font-weight:bold; color:red"></span>
-                        </div>
-                        <div class="form-group">
-                            Movzu: <input id="InqueryDetailsModalTitle" type="text" class="form-control form-control-sm" readonly>
-                        </div>
-                        <div class="form-group">
-                            Metn: <textarea id="InqueryDetailsModalText" class="form-control form-control-sm" readonly></textarea>
-                        </div>
-                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Bagla</button>
@@ -87,8 +76,21 @@
             </div>
         </div>
     </div>
-    @{
-        Html.RenderAction("Create");
-    }
+    <div class="modal fade" id="InqueryCreateModal" tabindex="-1" role="dialog" aria-labelledby="InqueryCreateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="InqueryCreateModalLabel">Yeni sorgu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  
+                </div>
+
+            </div>
+        </div>
+    </div>
  
 </div>

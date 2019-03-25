@@ -15,7 +15,7 @@ namespace LogisticsApp.Models.General
         public ICollection<Order> orders { get; set; }
 
         public double getPriceInManat(double d) {
-            return d / Value;
+            return Math.Round(d * Value, 2);
         }
 
     }

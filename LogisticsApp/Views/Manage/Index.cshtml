@@ -38,15 +38,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <span class="form-control-item">Senin balansinda @ViewBag.Balance manat pul var </span>
-                        <br>
-                        <br>
-                        <label class="form-control-item"> Balansina elave etmek istediyin meblegi burda yaz</label>
-                        <input type="number" class="form-control-item" name="balance">
+                        <p class="form-control-item">Senin balansinda @ViewBag.Balance manat pul var </p>
+                        <p class="form-control-item">Balansini artirmaq isteyirsenmi? </p>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Add money</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Xeyr</button>
+                        <a href="/Payment/AddToBalance" type="button" class="btn btn-primary">Beli</a>
                     </div>
                 </div>
             </div>
@@ -89,25 +87,6 @@
                                         <sup>*</sup>
                                     </label>
                                     <input type="date" name="order_date" value="2019-02-24" class="form-control">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-sm-12">
-                                    <label>
-                                        Haradan sifariş edilib
-                                        <sup>*</sup>
-                                    </label>
-                                    <select name="ordered_from" class="form-control">
-                                        <option value="shop">Mağaza</option>
-                                        <option value="other">Digər</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-sm-12">
-                                    <label>
-                                        Mağaza
-                                        <sup>*</sup>
-                                    </label>
-                                    <input type="text" name="shop_name" class="form-control">
                                 </div>
                             </div>
                             <div class="row">
@@ -213,11 +192,9 @@
         <div class="col-md-4">
             <div class="list-group">
                 @Html.ActionLink("Xaricdeki unvanlar", "Countries", "Manage", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action list-active" })
-                @Html.ActionLink("Sifarislerim", "Index", "Order", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action list-active" })
+                @Html.ActionLink("Sifarislerim", "Index", "Order", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action" })
                 @Html.ActionLink("Tenzimlemeler", "EditPersonalData", "Manage", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action" })
-
-                <a href="#" class="list-group-item list-group-item-action">Balans</a>
-
+                @Html.ActionLink("Balans", "ShowTransactions", "Payment", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action" })
                 <a href="/Message/Index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     Mesajlar
                     <span class="badge badge-primary badge-pill">@ViewBag.MessagesCounter</span>
@@ -226,7 +203,7 @@
                     Sorgular
                     <span class="badge badge-primary badge-pill">@ViewBag.InqueriesCounter</span>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action">Cixis</a>
+                @Html.ActionLink("Çıxış", "LogOff", "Account", routeValues: null, htmlAttributes: new { @class = "list-group-item list-group-item-action" })
             </div>
 
         </div>

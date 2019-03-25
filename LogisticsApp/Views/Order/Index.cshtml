@@ -1,71 +1,161 @@
 ﻿@model IEnumerable<LogisticsApp.Models.Order>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Manage/Index.cshtml";
+
+    var ordereds = Model.Where(w => w.Statuses.FirstOrDefault(a => a.isCurrent == true && a.Name == "ordered") != null);
+    var inforeignstocks = Model.Where(w => w.Statuses.FirstOrDefault(a => a.isCurrent == true && a.Name == "inforeignstock") != null);
+    var ontheways = Model.Where(w => w.Statuses.FirstOrDefault(a => a.isCurrent == true && a.Name == "ontheway") != null);
+    var arriveds = Model.Where(w => w.Statuses.FirstOrDefault(a => a.isCurrent == true && a.Name == "arrived") != null);
+    var delivereds = Model.Where(w => w.Statuses.FirstOrDefault(a => a.isCurrent == true && a.Name == "delivered") != null);
 }
 
-<!DOCTYPE html>
+<div id="orderInformations" class="card">
+    <div class="container">
+        <div>
+            <h3>odenilmemis sifarisler</h3>
+            <button class="btn btn-primary" id="selectAllUnpaids">hamisini sec</button>
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#OrderPaymentModal" id="payForOrder" disabled>Ode</button>
+        </div>
+        <div>
+            <table id="unpaidOrders" class="table table-sm table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(w=>w.isPaid==false))
+                    {
+                        string Link = " ";
+                        if (item.Link.Length > 20) { Link = item.Link.Substring(0, 18); }
+                        else { Link = item.Link; }
+                        <tr>
+                            <th scope="row">
+                                <input type="checkbox" class="UsersUnpaidOrders"
+                                       data-sumPrice="@item.valuta.getPriceInManat(item.Price*item.Quantity)"
+                                       data-id="@item.Id">
+                            </th>
+                            <td>@Link</td>
+                            <td>@item.category.Name </td>
+                            <td>@item.Price @item.valuta.Name </td>
+                            <td>@item.Quantity </td>
+                            <td>
+                                <button type="button" class="btn btn-info btn-sm OrderDetailsBtn" data-toggle="modal" data-target="#OrderDetailsModalLong" data-id="@item.Id">view</button>
+                                <button class="btn btn-danger btn-sm OrderDeleteBtn" data-toggle="modal" data-target="#OrderDeleteModal" data-id="@item.Id">del</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Link)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isPaid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isUrgent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Link)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isPaid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isUrgent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-    }
-    
-    </table>
-</body>
-</html>
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link " data-id="ordered">Sifaris edilib (@ordereds.Count())</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " data-id="inforeignstock">Xarici anbarda (@inforeignstocks.Count())</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " data-id="ontheway">Yola dusub (@ontheways.Count())</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-id="arrived">Catib (@arriveds.Count())</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-id="delivered">Tehvil verilib (@delivereds.Count())</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body position-relative" id="ordersPerSteps">
+
+
+
+
+    </div>
+</div>
+<div class="modal fade" id="OrderDetailsModalLong" tabindex="-1" role="dialog" aria-labelledby="OrderDetailsModalLongLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="OrderDetailsModalLongLabel">Sifarisin detallari</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @* bura ajax ile dolacaq  *@
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="OrderDeleteModal" tabindex="-1" role="dialog" aria-labelledby="OrderDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Delete", "Order", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="OrderDeleteModalId" name="id" value="" />
+                    <div class="form-group">
+                        Bu melumatlari silmekde eminsenmi ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Xeyr</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">Beli</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="OrderPaymentModal" tabindex="-1" role="dialog" aria-labelledby="OrderPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="OrderPaymentModalLabel">Sifaris uzre odenis</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Payment", "Order", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                <div id="OrderPaymentModalId">
+                    
+                </div>   
+                    
+                    <div class="form-group" id="OrderPaymentModalText">
+                        @* bura javascript ile yazi gelecek *@
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bagla</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">ODEMEK</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div> 

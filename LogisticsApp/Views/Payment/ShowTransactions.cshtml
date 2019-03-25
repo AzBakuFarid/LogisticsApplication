@@ -1,0 +1,36 @@
+﻿@model LogisticsApp.Models.TransactionViewModel
+@{
+    Layout = "~/Views/Manage/Index.cshtml";
+}
+<div id="TransactionInformations" class="card">
+    <div class="container">
+        <div class="jumbotronDiv">
+            <h1>Sizin balans emeliyyatlariniz</h1>
+        </div>
+        <div>
+            <table class="table table-sm table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.details)
+                    {
+                        <tr>
+                            <th scope="row"></th>
+                            <td>@item.CreatedDate</td>
+                            <td>@item.Balance </td>
+                            <td>@item.Amount </td>
+                            <td>@item.TransactionInfo </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

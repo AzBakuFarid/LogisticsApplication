@@ -29,27 +29,29 @@ namespace LogisticsApp.Controllers
             model.CustomerID = await model.getUserCustomerNumberAsync(UserId);
             ViewBag.inqueries = inqueries;
             ViewBag.messageTypes = db.messageTypes.ToList();
-            ViewBag.MessageTypeId = new SelectList(db.messageTypes, "Id", "Name");
+            ViewBag.MessageTypeId = new SelectList(db.messageTypes.ToList(), "Id", "Name");
             return PartialView(model);
         }
 
         // GET: Inquerie/Details/5
         public ActionResult Details(int? id)
         {
-            var UserId = User.Identity.GetUserId();
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var UserId = User.Identity.GetUserId();
+                Inquery inquery = db.inqueries.Single(s=>s.Id==id&&s.sender.Id== UserId);
+                InqueryViewModel model = new InqueryViewModel {
+                    Text = inquery.Text,
+                    MessageType = inquery.messageType.Name,
+                    CreatedDate=inquery.CreatedDate.ToString("dd.MM.yyyy"),
+                    isAnswered=inquery.isAnswered
+                };
+                return PartialView(model);
             }
-            Inquery inquery = db.inqueries.Find(id);
-            if (inquery == null || inquery.sender.Id != UserId)
-            {
+            catch (Exception){
                 return HttpNotFound();
             }
-            var DateView = inquery.CreatedDate.Day + "." +
-                            inquery.CreatedDate.Month.ToString() + "." +
-                            inquery.CreatedDate.Year.ToString();
-            return Json(new { CreateDate = DateView, MessageType = inquery.messageType.Name, Text = inquery.Text }, JsonRequestBehavior.AllowGet);
+          
         }
 
         // GET: Inquerie/Create
@@ -66,8 +68,6 @@ namespace LogisticsApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(InqueryViewModel model)
         {
-            
-
             if (ModelState.IsValid)
             {
                 string userId = User.Identity.GetUserId();

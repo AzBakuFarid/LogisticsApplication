@@ -17,7 +17,6 @@ namespace LogisticsApp.Models
         public int Id { get; set; }
         public string Text { get; set; }
         public DateTime CreatedDate { get; set; }
-        [DefaultValue(false)]
         public bool isAnswered { get; set; }
         public int MessageTypeId { get; set; }
         public string senderId { get; set; }
@@ -28,11 +27,13 @@ namespace LogisticsApp.Models
     }
 
     public class InqueryViewModel {
-
-        [Required]
-        public string Text { get; set; }
-        [Required]
         public int MessageTypeId { get; set; }
-
+        public string Text { get; set; }
+        [Display(Name ="Message Type")]
+        public string MessageType { get; set; }
+        [Display(Name = "Date of creation")]
+        public string CreatedDate { get; set; }
+        [Display(Name = "Is query answered?")]
+        public bool isAnswered { get; set; }
     }
 }

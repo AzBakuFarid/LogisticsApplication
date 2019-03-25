@@ -19,9 +19,17 @@ namespace LogisticsApp.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Order
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.orders.ToList());
+            var UserId = User.Identity.GetUserId();
+            var model = db.orders.Where(w => w.ApplicationUserId == UserId).ToList();
+            var userInfo = new GeneralContentViewModel();
+            ViewBag.Balance = await userInfo.getUserBalanceAsync(UserId);
+            ViewBag.MessagesCounter = await userInfo.getUserUnreadMessagesAsync(UserId);
+            ViewBag.InqueriesCounter = await userInfo.getUserUnAnsweredInqueriesAsync(UserId);
+            ViewBag.CustomerNumber = await userInfo.getUserCustomerNumberAsync(UserId);
+            ViewBag.userInfo = userInfo;
+            return View(model);
         }
 
         // GET: Order/Details/5
@@ -31,12 +39,27 @@ namespace LogisticsApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var UserId = User.Identity.GetUserId();
             Order order = db.orders.Find(id);
-            if (order == null)
+            if (order == null||order.ApplicationUserId!=UserId)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return PartialView(order);
+        }
+        public PartialViewResult ordersPerSteps(string id) {
+            List<Order> model = null;
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                model = db.orders.Where(w => w.ApplicationUserId == userId && w.Statuses.FirstOrDefault(a => a.isCurrent == true && a.Name == id) != null).ToList();
+            }
+            catch (Exception)
+            {
+                model = null;
+            }
+
+            return PartialView(model);
         }
 
         // GET: Order/Create
@@ -60,42 +83,45 @@ namespace LogisticsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(/*[Bind(Include = "Link,Price,Quantity,isPaid,isUrgent,ValutaId,CategoryId, Description")]*/ IList<OrderViewModel> model, int countryId)
+        public ActionResult Create(OrderCreateModel model)
         {
-            if (ModelState.IsValid)
+            Country country = null;
+            try
             {
-                Country country = null;
-                try
+                country = db.countries.Single(s => s.Id == model.countryId);
+
+                for (var i = 0; i < model.Link.Length; i++)
                 {
-                    country = db.countries.Single(s=>s.Id==countryId);
-                    foreach (var item in model)
+                    if (String.IsNullOrWhiteSpace(model.Link[i]) ||
+                        String.IsNullOrWhiteSpace(model.Description[i])||
+                         model.Price[i]<=0||model.Quantity[i]<1)  { throw new Exception(); }
+                    Order order = new Order
                     {
-                        Order order = new Order
-                        {
-                            Link = item.Link,
-                            Price = item.Price,
-                            isUrgent = item.isUrgent,
-                            Description = item.Description,
-                            Quantity = item.Quantity,
-                            CategoryId = item.CategoryId,
-                            CountryId = countryId,
-                            ApplicationUserId = User.Identity.GetUserId(),
-                            ValutaId = item.ValutaId,
-                        };
-                        db.orders.Add(order);
-                        db.SaveChanges();
+                        Link = model.Link[i],
+                        Price = model.Price[i],
+                        Description = model.Description[i],
+                        Quantity = model.Quantity[i],
+                        CategoryId = model.CategoryId[i],
+                        CountryId = model.countryId,
+                        ApplicationUserId = User.Identity.GetUserId(),
+                        ValutaId = model.ValutaId[i],
+                    };
+                    if (model.isUrgent == null || model.isUrgent == false)
+                    {
+                        order.isUrgent = false;
                     }
-                    
-                }
-                catch (Exception)
-                {
-                    return RedirectToAction("Create");
+                    else { order.isUrgent = true; }
+                    db.orders.Add(order);
+                    db.SaveChanges();
                 }
 
-                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Create");
             }
 
-            return RedirectToAction("Create", model);
+            return RedirectToAction("Index");
         }
 
         // GET: Order/Edit/5
@@ -129,31 +155,66 @@ namespace LogisticsApp.Controllers
             return View(order);
         }
 
-        // GET: Order/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = db.orders.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
         // POST: Order/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Order order = db.orders.Find(id);
-            db.orders.Remove(order);
-            db.SaveChanges();
+            var userId = User.Identity.GetUserId();
+            Order order = null;
+            try
+            {
+                order = db.orders.Single(s=>s.Id==id&&s.ApplicationUserId==userId&&s.Statuses.Count==0);
+                db.orders.Remove(order);
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+            }
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Payment(int[] selecteds) 
+            //bunu yazmisam deye artiq, yerini deyismedim. 
+            //gelecekde dusunurem ki PAYMENT controllere kecirmek lazimdi
+        {
+            var userId = User.Identity.GetUserId();
+            ApplicationUser user = null; 
+            IList<Order> orders = null;
+            try
+            {
+                user = db.Users.Single(s => s.Id == userId);
+                orders = db.orders.Where(w => selecteds.Any(a => a == w.Id) && w.ApplicationUserId == userId && w.isPaid == false).ToList();
+                double amount = orders.Sum(s => s.valuta.getPriceInManat(s.Price * s.Quantity));
+                // general settingsde 5% xidmet haqqi ve 2% suretli sifaris hisselerni hazirladiqdan sonra 
+                // onlarin qiymetini alib burda duzelis elemek lazim olacaq
+                if (amount <= user.Balance)
+                {
+                    foreach (var item in orders)
+                    {
+                        item.isPaid = true;
+                        item.addStatus(new Status
+                        {
+                            CreatedDate = DateTime.Now,
+                            isCurrent = true,
+                            Name = "ordered"
+                        });
+                    }
+                    
+                    Transaction tr = new Transaction(user, amount, TransactionAction.Extract);
+                    db.transactions.Add(tr);
+                    tr.TransactionInfo = "payment for order(s): "+String.Join(" , ", selecteds);
+                    db.SaveChanges();
+                }
+                else { return RedirectToAction("AddToBalance", "Payment"); }
+            }
+            catch { }
+           
+            return RedirectToAction("Index");
+        }
+
 
         protected override void Dispose(bool disposing)
         {

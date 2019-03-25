@@ -1,74 +1,68 @@
 ﻿@model LogisticsApp.Models.Order
 
-@{
-    Layout = null;
-}
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.Link)
+    </dt>
 
-<!DOCTYPE html>
+    <dd>
+        <a href="@Model.Link" target="_blank"> Link</a> 
+    </dd>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-    <div>
-        <h4>Order</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Link)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Link)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Price)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Price)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Quantity)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.isPaid)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.isPaid)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.isUrgent)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.isUrgent)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Description)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Description)
-            </dd>
-    
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-</body>
-</html>
+    <dt>
+        @Html.DisplayNameFor(model => model.Price)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Price) @Model.valuta.Name
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Quantity)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Quantity)
+    </dd>
+    <dt>
+        Price(sum)
+    </dt>
+
+    <dd>
+        @Model.valuta.getPriceInManat(Model.Price*Model.Quantity) AZN
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.isPaid)
+    </dt>
+
+    @if (Model.isPaid)
+    {
+        <dd>YES</dd>}
+    else
+    {
+        <dd>NO</dd>}
+
+    <dt>
+        @Html.DisplayNameFor(model => model.isUrgent)
+    </dt>
+
+    @if (Model.isPaid)
+    {
+        <dd>YES</dd>}
+    else
+    {
+        <dd>NO</dd>}
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Description)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Description)
+    </dd>
+
+</dl>
+
+
+
+

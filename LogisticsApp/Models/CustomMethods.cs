@@ -1,5 +1,6 @@
 ﻿using LogisticsApp.Models;
 using LogisticsApp.Models.General;
+using LogisticsApp.Models.Page;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,19 @@ namespace LogisticsApp.Models
             return await Task<string>.Run(() => { return db.Users.First(w => w.Id == userId).Surname; });
 
         }
-        
+        public static double CalculateBundlePrice(this double weight, IList<Taariff> taariffs) {
+            int a = 0;
+            double b = 0;
+            double max = taariffs.Max(m => m.Weight);
+            if (weight > max)
+            {
+                b = weight % max;
+                a = (int)(weight * 100 - b)/100;
+            }
+            double result1 = a * taariffs.First(f => f.Weight == max).Price;
+            double result2=taariffs.Where(w => w.Weight >= b).First().Price;
+            return result1+result2;
+        }
 
 
 
