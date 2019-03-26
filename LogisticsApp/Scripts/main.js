@@ -326,8 +326,25 @@ $(document).ready(function () {
             })
     })
 
-
-
+    $("#BundleSearch").on("keyup", function () {
+        let filter = $(this).val();
+        $.ajax({
+            url: "/Bundle/Search",
+            method: "POST",
+            data: {filter:filter}
+        }).done(function (res) {
+            $("#BundleSearchResult").html(res);
+            $("#BundleSearchResult").show();
+            })
+    })
+    $(document).on("click", function () {
+        $("#BundleSearchResult").hide();
+    })
+    $("#BundleSearch").click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $("#BundleSearchResult").show();
+    })
 
 
 

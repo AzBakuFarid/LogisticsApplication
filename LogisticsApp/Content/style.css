@@ -323,7 +323,39 @@ margin: 20px;
     border-radius: 100%; 
     font-size: 20px;
 }
-
     #goUp:hover {
-        background-color: #555; 
-    }  
+        background-color: #555;
+    }
+
+#BundleSearch {
+    width: 100%;
+    font-size: 15px;
+    padding: 11px;
+    height:40px;
+    border: 1px solid #ddd;
+    border-radius:40px;
+    background-color:#eee;
+    outline:none;
+}
+
+#BundleSearchResult {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+   
+}
+
+    #BundleSearchResult li a {
+        background-color: #f6f6f6;
+        padding: 12px;
+        text-decoration: none;
+        font-size: 18px;
+        color: black;
+        display: block;
+    
+    }
+
+        #BundleSearchResult li a:hover {
+            background-color: rgb(18, 18, 70);
+            color: white;
+        }

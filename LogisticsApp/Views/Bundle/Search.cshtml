@@ -1,0 +1,10 @@
+﻿@model IEnumerable<LogisticsApp.Models.Bundle>
+
+@if (Model != null)
+{
+
+    foreach (var item in Model)
+    {
+        <li><a href="/Bundle/Details/@item.Id">@item.Id | @item.Customer.Name @item.Customer.Surname</a></li>
+    }
+}
