@@ -32,6 +32,7 @@ namespace LogisticsApp.Models
         public virtual ICollection<Message> messages { get; set; }
         public virtual ICollection<Inquery> Inqueries { get; set; }
         public virtual ICollection<Transaction> transactions { get; set; }
+        public virtual ICollection<Bundle> bundles { get; set; }
 
 
     }

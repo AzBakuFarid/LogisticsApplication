@@ -24,10 +24,8 @@ $(document).ready(function () {
             method: "Post",
             data: { model:model }
         }).done(function (res) {
-            console.log(res)
             $("#calculator #calculatorResult").text(res.Value);
         })
-
     })
 
     $(".card-header a").on("click", function () {
@@ -318,6 +316,19 @@ $(document).ready(function () {
             $("#OrderPaymentModalId").append("<input type='hidden' name='selecteds' value='" + selecteds[i] + "' />")
         }
     })
+
+    $("#actions button[data-target='#declarationModal']").on("click", function () {
+        $.ajax({
+            url: "/Bundle/Create/",
+            method: "GET"
+        }).done(function (res) {
+            $("#declarationModal .modal-content").html(res);
+            })
+    })
+
+
+
+
 
 
 

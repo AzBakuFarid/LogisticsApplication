@@ -204,8 +204,8 @@ namespace LogisticsApp.Controllers
                     }
                     
                     Transaction tr = new Transaction(user, amount, TransactionAction.Extract);
-                    db.transactions.Add(tr);
                     tr.TransactionInfo = "payment for order(s): "+String.Join(" , ", selecteds);
+                    db.transactions.Add(tr);
                     db.SaveChanges();
                 }
                 else { return RedirectToAction("AddToBalance", "Payment"); }

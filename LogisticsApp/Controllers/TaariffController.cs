@@ -144,7 +144,7 @@ namespace LogisticsApp.Controllers
             }
 
 
-            return Json(new { Value ="0.00 "  }, JsonRequestBehavior.AllowGet);
+            return Json(new { Value ="0.00 " }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

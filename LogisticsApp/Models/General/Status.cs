@@ -12,6 +12,7 @@ namespace LogisticsApp.Models.General
         public DateTime CreatedDate { get; set; }
         public bool isCurrent { get; set; }
 
-        public virtual ICollection<Order> orders { get; set; }
+        public virtual ICollection<Order> orders { get; set; } // bunu silecem
+        public virtual ICollection<Bundle> bundles { get; set; }
     }
 }

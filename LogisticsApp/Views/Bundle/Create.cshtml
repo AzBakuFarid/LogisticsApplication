@@ -1,0 +1,120 @@
+﻿@model LogisticsApp.Models.BundleCreateModel
+
+
+<div class="modal-header">
+    <h5 class="modal-title" id="declarationModal">Beyanname</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+@using (Html.BeginForm("Create", "Bundle", FormMethod.Post,
+                            new { enctype = "multipart/form-data", id = "CreateDeclarationForm" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <label>
+                    Ölkə
+                    <sup>*</sup>
+                </label>
+                <select name="country" class="form-control" required>
+                    <option selected>Select country</option>
+                    @foreach (var item in ViewBag.Country)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <label>
+                    Bağlama sayı (məs:1,2,3)
+                    <sup>*</sup>
+                </label>
+                <input type="number" name="BundleQuantity" value="1" class="form-control" required min="1" max="100" step="1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <label>
+                    Sifariş tarixi
+                    <sup>*</sup>
+                </label>
+                <input type="date" name="OrderDate" id="OrderDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" required class="form-control">
+                <script>
+                    document.getElementById("OrderDate").max = new Date().toISOString().split("T")[0];
+                </script>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <label>
+                    Kateqoriya
+                    <sup>*</sup>
+                </label>
+                <select name="Category" required class="form-control">
+                    <option selected>Select category</option>
+                    @foreach (var item in ViewBag.Category)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <label>
+                    İzləmə kodu
+                    <sup>*</sup>
+                </label>
+                <input type="text" class="form-control" name="TrackNumber" required>
+            </div>
+            <div class="col-12 col-lg-6">
+                <label>
+                    Invoice
+                    <sup>*</sup>
+                </label>
+                <input type="file" class="form-control" name="Invoice" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-4">
+                <label>
+                    Qiymət
+                    <sup>*</sup>
+                </label>
+                <input type="number" step="0.01" class="form-control" name="price" min="0.01" required>
+            </div>
+            <div class="col-12 col-lg-2">
+                <label>
+                    Valyuta
+                    <sup>*</sup>
+                </label>
+                <select name="Valuta" required class="form-control">
+                    @foreach (var item in ViewBag.Valuta)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+             <div class="col-12 col-lg-6">
+                <label>
+                    Market 
+                    <sup>*</sup>
+                </label>
+                <input type="text" class="form-control" name="MarketName" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <label>
+                    Qeyd
+                </label>
+                <textarea class="form-control" name="Description" placeholder="Əgər əlavə qeydiniz varsa bura yaza bilərsiniz"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bagla</button>
+        <button type="submit" class="btn btn-primary">Tesdiqle</button>
+    </div>
+}

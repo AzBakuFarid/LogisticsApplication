@@ -12,7 +12,8 @@ namespace LogisticsApp.Models.General
         public double Value { get; set; }
         public bool isActive { get; set; }
 
-        public ICollection<Order> orders { get; set; }
+        public virtual ICollection<Order> orders { get; set; }
+        public virtual ICollection<Bundle> bundles { get; set; }
 
         public double getPriceInManat(double d) {
             return Math.Round(d * Value, 2);

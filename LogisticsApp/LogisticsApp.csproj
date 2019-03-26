@@ -175,6 +175,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AboutsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BundleController.cs" />
     <Compile Include="Controllers\CaruselsController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\CountrieController.cs" />
@@ -360,6 +361,11 @@
     <Content Include="Views\Payment\ShowTransactions.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\PartialCalculator.cshtml" />
+    <Content Include="Views\Bundle\Create.cshtml" />
+    <Content Include="Views\Bundle\Delete.cshtml" />
+    <Content Include="Views\Bundle\Details.cshtml" />
+    <Content Include="Views\Bundle\Edit.cshtml" />
+    <Content Include="Views\Bundle\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -19,6 +19,7 @@ namespace LogisticsApp.Models.General
         public virtual ICollection<Taariff> Taariffs { get; set; }
         public virtual ICollection<Market> markets { get; set; }
         public virtual CountryInformation countryInformation { get; set; }
+        public virtual ICollection<Bundle> bundles { get; set; }
     }
 
     public class CountryViewModel {
