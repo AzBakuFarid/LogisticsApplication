@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LogisticsApp.Models;
+using System.Collections.Generic;
 
 namespace LogisticsApp.Controllers
 {
@@ -142,6 +143,23 @@ namespace LogisticsApp.Controllers
             return View();
         }
 
+        // search acount by customer number on adminpanel
+        [HttpPost]
+        public ActionResult Search(string filter) 
+        {
+            List<ApplicationUser> users = null;
+            if (filter != null)
+            {
+                if (filter.regexControl(@"^\d+$"))
+                {
+                    using (ApplicationDbContext db = new ApplicationDbContext())
+                    {
+                        users = db.Users.Where(w => w.CustomerNumber.ToString().IndexOf(filter.ToString()) >= 0).ToList();
+                    }
+                }
+            }
+            return PartialView(users);
+        }
         //
         // POST: /Account/Register
         [HttpPost]

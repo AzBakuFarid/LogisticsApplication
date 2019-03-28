@@ -41,13 +41,14 @@ namespace LogisticsApp.Controllers
             }
             var UserId = User.Identity.GetUserId();
             Order order = db.orders.Find(id);
-            if (order == null||order.ApplicationUserId!=UserId)
+            if (order == null || order.ApplicationUserId != UserId)
             {
                 return HttpNotFound();
             }
             return PartialView(order);
         }
-        public PartialViewResult ordersPerSteps(string id) {
+        public PartialViewResult ordersPerSteps(string id)
+        {
             List<Order> model = null;
             try
             {
@@ -93,8 +94,8 @@ namespace LogisticsApp.Controllers
                 for (var i = 0; i < model.Link.Length; i++)
                 {
                     if (String.IsNullOrWhiteSpace(model.Link[i]) ||
-                        String.IsNullOrWhiteSpace(model.Description[i])||
-                         model.Price[i]<=0||model.Quantity[i]<1)  { throw new Exception(); }
+                        String.IsNullOrWhiteSpace(model.Description[i]) ||
+                         model.Price[i] <= 0 || model.Quantity[i] < 1) { throw new Exception(); }
                     Order order = new Order
                     {
                         Link = model.Link[i],
@@ -164,7 +165,7 @@ namespace LogisticsApp.Controllers
             Order order = null;
             try
             {
-                order = db.orders.Single(s=>s.Id==id&&s.ApplicationUserId==userId&&s.Statuses.Count==0);
+                order = db.orders.Single(s => s.Id == id && s.ApplicationUserId == userId && s.Statuses.Count == 0);
                 db.orders.Remove(order);
                 db.SaveChanges();
             }
@@ -176,12 +177,12 @@ namespace LogisticsApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Payment(int[] selecteds) 
-            //bunu yazmisam deye artiq, yerini deyismedim. 
-            //gelecekde dusunurem ki PAYMENT controllere kecirmek lazimdi
+        public ActionResult Payment(int[] selecteds)
+        //bunu yazmisam deye artiq, yerini deyismedim. 
+        //gelecekde dusunurem ki PAYMENT controllere kecirmek lazimdi
         {
             var userId = User.Identity.GetUserId();
-            ApplicationUser user = null; 
+            ApplicationUser user = null;
             IList<Order> orders = null;
             try
             {
@@ -202,16 +203,16 @@ namespace LogisticsApp.Controllers
                             Name = "ordered"
                         });
                     }
-                    
+
                     Transaction tr = new Transaction(user, amount, TransactionAction.Extract);
-                    tr.TransactionInfo = "payment for order(s): "+String.Join(" , ", selecteds);
+                    tr.TransactionInfo = "payment for order(s): " + String.Join(" , ", selecteds);
                     db.transactions.Add(tr);
                     db.SaveChanges();
                 }
                 else { return RedirectToAction("AddToBalance", "Payment"); }
             }
             catch { }
-           
+
             return RedirectToAction("Index");
         }
 

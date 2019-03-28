@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using LogisticsApp.Models;
@@ -112,10 +111,8 @@ namespace LogisticsApp.Controllers
             List<Bundle> bundles = null;
             if (filter != null)
             {
-                    string pattern = @"^\w+$";
-                    Regex regex = new Regex(pattern);
-                    if (regex.IsMatch(filter))
-                    {
+                if (filter.regexControl(@"^\w+$"))
+                {
                     bundles = db.bundles.Where(w => w.Id.ToString().IndexOf(filter.ToString()) >= 0 ||
                     w.TrackNumber.ToUpper().IndexOf(filter.ToUpper()) >= 0).ToList();
                 }

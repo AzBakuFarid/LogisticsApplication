@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -71,7 +72,10 @@ namespace LogisticsApp.Models
             double result2=taariffs.Where(w => w.Weight >= b).First().Price;
             return result1+result2;
         }
-
+        public static bool regexControl(this string _string, string pattern) {
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(_string);
+        }
 
 
 

@@ -1,0 +1,11 @@
+﻿@model IEnumerable<LogisticsApp.Models.ApplicationUser>
+
+@if (Model != null)
+{
+
+    foreach (var item in Model)
+    {
+        <li><a href="/Account/Details/@item.CustomerNumber">@item.CustomerNumber | @item.Name @item.Surname</a></li>
+    }
+}
+

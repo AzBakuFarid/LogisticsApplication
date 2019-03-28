@@ -367,6 +367,7 @@
     <Content Include="Views\Bundle\Edit.cshtml" />
     <Content Include="Views\Bundle\Index.cshtml" />
     <Content Include="Views\Bundle\Search.cshtml" />
+    <Content Include="Views\Account\Search.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

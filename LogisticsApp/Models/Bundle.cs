@@ -19,6 +19,7 @@ namespace LogisticsApp.Models
         public string InvoiceFilePath { get; set; }
         public string Description { get; set; }
 
+
         public int CategoryId { get; set; }
         public int CountryId { get; set; }
         public int ValutaId { get; set; }
@@ -32,20 +33,43 @@ namespace LogisticsApp.Models
 
         public void addStatus(Status _status)
         {
-            if (Statuses == null) {
-                Statuses = new List<Status>();
-                _status.isCurrent = true;
-                Statuses.Add(_status);
-                return;
-            }
-            if (!Statuses.Any(a => a.Name.Equals(_status.Name)))
+            if (_status != null)
             {
-                foreach (var item in Statuses)
+                if (Statuses == null)
                 {
-                    item.isCurrent = false;
+                    Statuses = new List<Status>();
+                    _status.isCurrent = true;
+                    Statuses.Add(_status);
+                    return;
                 }
-                _status.isCurrent = true;
-                Statuses.Add(_status);
+                if (!Statuses.Any(a => a.Name.Equals(_status.Name)))
+                {
+                    foreach (var item in Statuses)
+                    {
+                        item.isCurrent = false;
+                    }
+                    _status.isCurrent = true;
+                    Statuses.Add(_status);
+                }
+            }
+        }
+        public void editStatus(Status _status) {
+            if (Statuses != null&& _status != null) {
+                Status st = Statuses.FirstOrDefault(f => f.Name.Equals(_status.Name));
+                if (st != null) {
+                    st = _status;
+                }
+            }
+        }
+        public void deleteStatus(Status _status)
+        {
+            if (Statuses != null && _status != null)
+            {
+                Status st = Statuses.FirstOrDefault(f => f.Name.Equals(_status.Name));
+                if (st != null)
+                {
+                    Statuses.Remove(st);
+                }
             }
         }
     }

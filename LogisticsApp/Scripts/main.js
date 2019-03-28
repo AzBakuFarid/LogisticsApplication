@@ -326,24 +326,35 @@ $(document).ready(function () {
             })
     })
 
-    $("#BundleSearch").on("keyup", function () {
+    $("#BundleSearch, #AccountSearch").on("keyup", function () {
         let filter = $(this).val();
+        let url = "";
+        let target = "";
+        if ($(this).attr("id") == "BundleSearch") {
+            url = "/Bundle/Search";
+            target = "#BundleSearchResult";
+        }
+        else {
+            url = "/Account/Search";
+            target = "#AccountSearchResult";
+        }
         $.ajax({
-            url: "/Bundle/Search",
+            url: url,
             method: "POST",
             data: {filter:filter}
         }).done(function (res) {
-            $("#BundleSearchResult").html(res);
-            $("#BundleSearchResult").show();
+            $(target).html(res);
+            $(target).show();
             })
     })
     $(document).on("click", function () {
-        $("#BundleSearchResult").hide();
+        $(".adminHeaderSearchResult").hide();
     })
-    $("#BundleSearch").click(function (e) {
+    $(".adminHeaderSearch").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        $("#BundleSearchResult").show();
+        $(".adminHeaderSearchResult").hide();
+       $(this).next("ul").show();
     })
 
 

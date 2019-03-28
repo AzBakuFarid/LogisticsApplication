@@ -24,6 +24,7 @@ namespace LogisticsApp.Models
         public bool isPaid { get; set; }
         public bool isUrgent { get; set; }
         public string Description { get; set; }
+       
 
         public int CategoryId { get; set; }
         public string ApplicationUserId { get; set; }
@@ -43,22 +44,19 @@ namespace LogisticsApp.Models
             }
         }
     }
+
     public class OrderViewModel :GeneralContentViewModel {
         public int Id { get; set; }
-        [Required]
         public string Link { get; set; }
-        [Required]
         public double Price { get; set; }
-        [Required]
         public int Quantity { get; set; }
         public bool isPaid { get; set; }
         public bool isUrgent { get; set; }
-        [Required]
         public string Description { get; set; }
-        [Required]
         public int CategoryId { get; set; }
-        [Required]
         public int ValutaId { get; set; }
+        public string customer { get; set; }
+        public int CustomerId { get; set; }
     }
     public class OrderCreateModel 
     {
