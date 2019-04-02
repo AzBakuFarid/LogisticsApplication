@@ -77,5 +77,50 @@ namespace LogisticsApp.Controllers
             }
             return PartialView(model);
         }
+
+        [HttpGet]
+        public ActionResult AdminPaymentForOrder(int id) {
+            OrderViewModel model = new OrderViewModel();
+            try
+            {
+                Order order=db.orders.Single(w => w.Id == id);
+                model.Id = order.Id;
+                model.Customer = order.customer;
+                model.Valuta = order.valuta;
+                model.Quantity = order.Quantity;
+                model.Price = order.Price;
+            }
+            catch (Exception){}
+
+            ViewBag.ServiceTax = 5; // bunlari bazaya elave etmek imkani yaranandan sonra deyisib dinamic elemek lazimdi
+            ViewBag.UrgencyTax = 2;// bunlari bazaya elave etmek imkani yaranandan sonra deyisib dinamic elemek lazimdi
+            return PartialView(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AdminPaymentForOrder(int[] selecteds, int _customer, int _order)
+        {
+            ApplicationUser user = null;
+            Order order = null;
+            
+            try
+            {
+                user = db.Users.Single(s=>s.CustomerNumber==_customer);
+                order = db.orders.Single(s=>s.Id==_order&&s.isPaid==false&&s.customer.CustomerNumber==_customer);
+                double amount = order.valuta.getPriceInManat(order.Price * order.Quantity);
+                double serviceTax = Math.Round(amount * 5 / 100, 2);  // general settingsde 5% xidmet haqqi ve 2% suretli sifaris hisselerni hazirladiqdan sonra 
+                double urgencyTax = order.isUrgent==true?Math.Round(amount * 2 / 100, 2):0;  // onlarin qiymetini alib burda duzelis elemek lazim olacaq
+                double sum = amount + urgencyTax + serviceTax;
+                if (sum < user.Balance) {
+                    Transaction tr = new Transaction(user, sum, TransactionAction.Extract);
+                    tr.TransactionInfo = "payment for order(s): " + _order;
+                    db.transactions.Add(tr);
+                    order.isPaid = true;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception) {}
+            return RedirectToAction("List","Order");
+        }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<LogisticsApp.Models.OrderViewModel>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Customer</th>
+            <th scope="col">Custm. ID</th>
+            <th scope="col">Country</th>
+            <th scope="col">Order date</th>
+            <th scope="col">Bundle status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Customer.Name @item.Customer.Surname
+                </td>
+                <td>
+                    @item.Customer.CustomerNumber
+                </td>
+                <td>
+                    @item.Country.Name
+                </td>
+                <td>
+                    @item.CreatedDate
+                </td>
+                <td>
+                    @foreach (var status in ((IEnumerable<LogisticsApp.Models.Bundle>)ViewBag.Bundles).Where(w => w.Id == item.Bundle).First().Statuses)
+                    {
+                        <span style="display:block; font-size:10px">@status.Name - @status.CreatedDate.ToString("dd.MM.yyyy HH:mm:ss")</span>
+                    }
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info btn-sm AdminOrderProcessBtn" data-toggle="modal" data-target="#AdminOrderProcessLong" data-id="@item.Id">Process</button>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>

@@ -357,3 +357,22 @@ margin: 20px;
             background-color: rgb(18, 18, 70);
             color: white;
         }
+.AdminOrderViewIsPaid, .AdminOrderViewIsUrgent {
+    font-size:12px;
+    padding: 0 3px;
+    display:inline-block;
+    color:white;
+    border-radius:5px;
+    background-color:red;
+}
+.AdminOrderViewIsPaid {
+    background-color: green;
+}
+.AdminOrderProcessBtn, .AdminOrderPaymentBtn, .AdminCreateInvoiceBtn {
+    display: block;
+    margin: 10px 0 0 0;
+}
+.AdminOrderActionBtns {
+display:none;
+z-index:1000;
+}

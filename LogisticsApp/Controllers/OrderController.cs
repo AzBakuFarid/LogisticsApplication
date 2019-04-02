@@ -32,6 +32,71 @@ namespace LogisticsApp.Controllers
             return View(model);
         }
 
+        public ActionResult List()
+        {
+            List<OrderViewModel> model = new List<OrderViewModel>();
+            try
+            {
+                foreach (var item in db.orders.OrderByDescending(o=>o.isPaid).ThenByDescending(o=>o.CreatedDate).ToList())
+                {
+                    model.Add(new OrderViewModel {
+                        Id = item.Id,
+                        Link = item.Link,
+                        Price = item.Price,
+                        Quantity = item.Quantity,
+                        Description = item.Description,
+                        isPaid = item.isPaid,
+                        isUrgent = item.isUrgent,
+                        CreatedDate = item.CreatedDate.ToString("yyyy.MM.dd HH:mm:ss"),
+                        Customer=item.customer,
+                        Country=item.country,
+                        Valuta=item.valuta,
+                        Category=item.category,
+                        Bundle=item.BundleId
+                    });
+                }
+                ViewBag.Bundles = db.bundles.ToList();
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Search(string filter)
+        {
+            var model = new List<OrderViewModel>();
+            try
+            {
+                if (filter.regexControl(@"^[a-zA-Z0-9 ]*$"))
+                {
+                    var orders = db.orders.Where(w => w.BundleId > 0 &&
+                    ((w.customer.Name + " " + w.customer.Surname).ToUpper().IndexOf(filter.ToUpper()) >= 0 ||
+                    w.Id.ToString().IndexOf(filter) >= 0))
+                    .ToList();
+                    foreach (var item in orders)
+                    {
+                        model.Add(new OrderViewModel
+                        {
+                            Id = item.Id,
+                            CreatedDate = item.CreatedDate.ToString("yyyy.MM.dd HH:mm:ss"),
+                            Customer = item.customer,
+                            Country = item.country,
+                            Bundle = item.BundleId
+                        });
+                    }
+                }
+            }
+            catch (Exception) {}
+            ViewBag.Bundles = db.bundles.ToList();
+            return PartialView("Search", model);
+        }
+
+
+
         // GET: Order/Details/5
         public ActionResult Details(int? id)
         {
@@ -47,6 +112,22 @@ namespace LogisticsApp.Controllers
             }
             return PartialView(order);
         }
+
+        public ActionResult AdminOrderInfo(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Order order = db.orders.Find(id);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView("Details",order);
+        }
+
         public PartialViewResult ordersPerSteps(string id)
         {
             List<Order> model = null;
@@ -67,7 +148,7 @@ namespace LogisticsApp.Controllers
         public async Task<ActionResult> Create()
         {
             var userId = User.Identity.GetUserId();
-            var model = new OrderViewModel();
+            var model = new OrderCreateModel();
             model.Balance = await model.getUserBalanceAsync(userId);
             model.MessageCounter = await model.getUserUnreadMessagesAsync(userId);
             model.InqueryCounter = await model.getUserUnAnsweredInqueriesAsync(userId);
@@ -107,7 +188,7 @@ namespace LogisticsApp.Controllers
                         ApplicationUserId = User.Identity.GetUserId(),
                         ValutaId = model.ValutaId[i],
                     };
-                    if (model.isUrgent == null || model.isUrgent == false)
+                    if (model.isUrgent == false)
                     {
                         order.isUrgent = false;
                     }
@@ -173,6 +254,23 @@ namespace LogisticsApp.Controllers
             {
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AdminDelete(int id)
+        {
+            Order order = null;
+            try
+            {
+                order = db.orders.Single(s => s.Id == id && s.BundleId== 0);
+                db.orders.Remove(order);
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+            }
+            return RedirectToAction("List");
         }
 
         [HttpPost]

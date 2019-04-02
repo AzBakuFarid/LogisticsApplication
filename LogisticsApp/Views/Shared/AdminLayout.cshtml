@@ -16,21 +16,21 @@
     <link rel="stylesheet" href="~/Content/style.css">
     @Styles.Render("~/Content/css")
 </head>
-<body style="padding:20px">
-    @if ((string)TempData["AlertMessage"]!= null)
-    {<div class="container" id="alert" style="text-align:center" >
-         <div class="alert alert-danger" role="alert" style="display:inline-block">
-             @TempData["AlertMessage"]
-         </div> 
-        <button class="btn btn-danger">X</button>
-    </div>
+<body style="padding:20px;">
+    @if ((string)TempData["AlertMessage"] != null)
+    {<div class="container" id="alert" style="text-align:center">
+            <div class="alert alert-danger" role="alert" style="display:inline-block">
+                @TempData["AlertMessage"]
+            </div>
+            <button class="btn btn-danger">X</button>
+        </div>
     }
 
 
     @RenderBody()
 
 
-
+    <a href="#" id="goUp"><i class="fas fa-arrow-up"></i></a>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>

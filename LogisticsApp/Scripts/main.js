@@ -18,7 +18,6 @@ $(document).ready(function () {
             Height: $("#calculator #Height").val(),
             Weight: $("#calculator #Weight").val()
         }
-        console.log(model)
         $.ajax({
             url: "/Taariff/Calculator/",
             method: "Post",
@@ -69,7 +68,6 @@ $(document).ready(function () {
             method: "POST",
             data: { id: id }
         }).done(function (res) {
-            console.log(res)
             $("#MessageModalDate").html(res.CreateDate);
             $("#MessageModalTitle").attr("value", res.MessageType);
             $("#MessageModalText").text(res.Text);
@@ -131,12 +129,10 @@ $(document).ready(function () {
     })
     $(".AboutDeleteBtn").on("click", function () {
         let id = $(this).attr("data-id");
-        console.log(id);
         $("#AboutDeleteModalId").val(id);
     })
     $("#SaveActiveAboutBtn").on("click", function () {
         let id = $("#AdminAbout input[type='checkbox']:checked").attr("data-id");
-        console.log(id)
         $.ajax({
             url: "/Abouts/ChangeActivityStatus/",
             method: "POST",
@@ -242,7 +238,7 @@ $(document).ready(function () {
             where.children().last().find(".deleteOrderBtn").attr("data-counter", "#orderlinkrow" + counter).removeAttr("disabled")
             where.append(btn)
         }
-        else { console.log("error") }
+        
     })
     $(document).on("click", ".deleteOrderBtn", function () {
         var item = $(this).attr("data-counter");
@@ -255,17 +251,15 @@ $(document).ready(function () {
             method: "POST",
             data: { id: id }
         }).done(function (res) {
-            console.log(res)
             $("#ordersPerSteps").html(res);
         })
     })
     $(document).on("click", "button.OrderDetailsBtn", function (e) {
 
         let id = $(this).attr("data-id");
-        console.log(id)
         $.ajax({
             url: "/Order/Details/",
-            method: "POST",
+            method: "GET",
             data: { id: id }
         }).done(function (res) {
             $("#OrderDetailsModalLong .modal-body").html(res);
@@ -274,7 +268,6 @@ $(document).ready(function () {
     })
     $(".OrderDeleteBtn").on("click", function () {
         let id = $(this).attr("data-id");
-        console.log(id)
         $("#OrderDeleteModalId").val(id);
     })
     $("#selectAllUnpaids").on("click", function () {
@@ -343,12 +336,13 @@ $(document).ready(function () {
             method: "POST",
             data: {filter:filter}
         }).done(function (res) {
+            console.log(res);
             $(target).html(res);
             $(target).show();
             })
     })
     $(document).on("click", function () {
-        $(".adminHeaderSearchResult").hide();
+        $(".adminHeaderSearchResult, .AdminOrderActionBtns").hide();
     })
     $(".adminHeaderSearch").click(function (e) {
         e.preventDefault();
@@ -357,9 +351,56 @@ $(document).ready(function () {
        $(this).next("ul").show();
     })
 
+    $(".adminOrderShowActionsBtn").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(".AdminOrderActionBtns").hide();
+        $(this).siblings("div").show();
+    })
+    $(document).on("click", ".AdminOrderProcessBtn", function () {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Order/AdminOrderInfo/",
+            method: "GET",
+            data: { id: id }
+        }).done(function (res) {
+            $("#AdminOrderProcessLong .modal-body").html(res);
+            $("#AdminOrderProcessLong").show();
+        })
 
+    })
+    $(".AdminOrderDeleteBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $("#AdminOrderDeleteModalId").val(id);
+    })
+    $("#ShowAllOrders").on("click", function () {
+        $("#ListAllOrders").toggle();
+    })
+    $("#AdminOrdersAll span[data-id='AdminSearchOrder']").on("click", function () {
+        let filter = $("#AdminOrdersAll input[placeholder='search for order']").val();
+        $.ajax({
+            url: "/Order/Search/",
+            method: "POST",
+            data: { filter: filter }
+        }).done(function (res) {
+            $("#AdminOrdersAll #ListAllOrders").html(res);
+            $("#AdminOrdersAll #ListAllOrders").show();
+        })
 
+    })
+    $(".AdminOrderPaymentBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        console.log(id)
+        $.ajax({
+            url: "/Payment/AdminPaymentForOrder/",
+            method: "GET",
+            data: { id: id }
+        }).done(function (res) {
+            $("#AdminOrderPaymentModal .modal-body").html(res);
+            $("#AdminOrderPaymentModal").show();
+        })
 
+    })
 
 
 

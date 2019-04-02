@@ -1,0 +1,156 @@
+﻿@model IEnumerable<LogisticsApp.Models.OrderViewModel>
+
+@{
+
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+    var bundles = ViewBag.Bundles as IEnumerable<LogisticsApp.Models.Bundle>;
+}
+
+<div id="AdminOrdersAll">
+    <table class="table table-bordered table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Customer</th>
+                <th scope="col">Custm. ID</th>
+                <th scope="col">Country</th>
+                <th scope="col">Order date</th>
+                <th scope="col">Paid/fast</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Where(w => w.Bundle == 0).ToList())
+            {
+                <tr>
+                    <td>
+                        @item.Customer.Name @item.Customer.Surname
+                    </td>
+                    <td>
+                        @item.Customer.CustomerNumber
+                    </td>
+                    <td>
+                        @item.Country.Name
+                    </td>
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                    <td>
+                        @if (item.isPaid == true)
+                        {<span class="AdminOrderViewIsPaid">Paid</span>}
+                        @if (item.isUrgent == true)
+                        {<span class="AdminOrderViewIsUrgent">Urgent</span>}
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm adminOrderShowActionsBtn">Actions</button>
+                        <button class="btn btn-danger btn-sm AdminOrderDeleteBtn" data-toggle="modal" data-target="#AdminOrderDeleteModal" data-id="@item.Id">Del</button>
+                        <div class="AdminOrderActionBtns" style="display:none">
+
+                            <button type="button" class="btn btn-info btn-sm AdminOrderProcessBtn" data-toggle="modal" data-target="#AdminOrderProcessLong" data-id="@item.Id">Process</button>
+                            @if (item.isPaid == false)
+                            {
+                                <button type="button" class="btn btn-success btn-sm AdminOrderPaymentBtn" data-toggle="modal" data-target="#AdminOrderPaymentModal" data-id="@item.Id">Pay</button>
+                            }
+                            <button type="button" class="btn btn-info btn-sm AdminCreateInvoiceBtn" data-toggle="modal" data-target="#AdminCreateInvoiceLong" data-id="@item.Id">Invoice</button>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <br />
+    <hr />
+    <div style="display:inline-block;">
+        <button type="button" id="ShowAllOrders" class="btn btn-light" style="margin:20px">Show all orders</button>
+    </div>
+    <div style="display:inline-block;">
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" data-id="AdminSearchOrder" id="basic-addon1" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="search for order" aria-label="" aria-describedby="basic-addon1">
+                </div>
+            </form>
+        </nav>
+    </div>
+    <div id="ListAllOrders" style="display:none;">
+
+        @{
+            Html.RenderPartial("~/Views/Order/Search.cshtml", Model.Where(w => w.Bundle > 0).ToList());
+        }
+
+    </div>
+</div>
+
+<div class="modal fade" id="AdminOrderProcessLong" tabindex="-1" role="dialog" aria-labelledby="AdminOrderProcessLongLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminOrderProcessLongLabel">Order Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @* bura ajax ile content gelir *@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AdminOrderDeleteModal" tabindex="-1" role="dialog" aria-labelledby="AdminOrderDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminOrderDeleteModalLabel">Order Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("AdminDelete", "Order", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="AdminOrderDeleteModalId" name="id" value="" />
+                    <div class="form-group">
+                        Bu melumatlari silmekde eminsenmi ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Xeyr</button>
+                        <button type="submit" class="btn btn-primary" data-id="">Beli</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="declarationModal" tabindex="-1" role="dialog" aria-labelledby="declarationModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            @* bura ajax ile content gelir *@
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AdminOrderPaymentModal" tabindex="-1" role="dialog" aria-labelledby="AdminOrderPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminOrderPaymentModalLabel">Payment for order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+               
+            </div>
+        </div>
+    </div>
+</div> 

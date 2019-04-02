@@ -1,0 +1,55 @@
+﻿@model LogisticsApp.Models.OrderViewModel
+
+@{
+
+    double amount = Model.Valuta.getPriceInManat(Model.Price * Model.Quantity);
+    double serviceTax = Math.Round(amount * ViewBag.ServiceTax / 100, 2);
+    double urgencyTax = Model.isUrgent==true? Math.Round(amount * ViewBag.UrgencyTax / 100, 2):0;
+}
+
+@using (Html.BeginForm("AdminPaymentForOrder", "Payment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <span class="form-control" style="display:inline-block;background-color:grey;color:black;font-weight:bold">@Model.Customer.Name @Model.Customer.Surname | @Model.Customer.CustomerNumber</span>
+    </div>
+    <div class="form-group">
+        <span class="form-control" style="display:inline-block;background-color:grey;color:darkred;font-weight:bold">Balance: @Model.Customer.Balance</span>
+    </div>
+    <div class="form-group">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Price</th>
+                    <th scope="col"></th>
+                    <th scope="col">Service tax</th>
+                    <th scope="col"></th>
+                    <th scope="col">tax for urgency</th>
+                    <th scope="col"></th>
+                    <th scope="col">Netto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @amount AZN
+                    </td>
+                    <td>+</td>
+                    <td>@serviceTax AZN</td>
+                    <td>+</td>
+                    <td>@urgencyTax AZN</td>
+                    <td>=</td>
+                    <td style="font-size:20px;font-weight:bold;color:red">@(amount+serviceTax+urgencyTax) AZN</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <input type ="hidden" name ="_order" value = "@Model.Id" />
+    <input type="hidden" name="_customer" value="@Model.Customer.CustomerNumber" />
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-success" data-id="">Pay</button>
+    </div>
+}
