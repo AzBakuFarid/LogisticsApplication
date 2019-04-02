@@ -401,7 +401,16 @@ $(document).ready(function () {
         })
 
     })
-
+    $(".AdminCreateInvoiceBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Bundle/AdminCreate/",
+            method: "GET",
+            data: {_order:id}
+        }).done(function (res) {
+            $("#declarationModal .modal-content").html(res);
+        })
+    })
 
 
 })

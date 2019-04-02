@@ -40,12 +40,35 @@ namespace LogisticsApp.Controllers
         }
 
         // GET: Bundle/Create
+        [HttpGet]
         public ActionResult Create()
         {
             ViewBag.Category = db.categories.ToList();
             ViewBag.Country = db.countries.Where(w => w.isActive == true).ToList();
             ViewBag.Valuta = db.valutas.Where(w => w.isActive == true).ToList();
             return PartialView();
+        }
+
+        [HttpGet]
+        public ActionResult AdminCreate(int _order)
+        {
+            OrderViewModel model = null;
+            try
+            {
+                Order item = db.orders.Single(s => s.Id == _order && s.isPaid == true);
+                model = new OrderViewModel {
+                    Id = item.Id,
+                    Price = item.Price,
+                    Quantity = item.Quantity,
+                    CreatedDate = item.CreatedDate.ToString("yyyy.MM.dd HH:mm:ss"),
+                    Customer = item.customer,
+                    Country = item.country,
+                    Valuta = item.valuta,
+                    Category = item.category,
+                };
+            }
+            catch (Exception){ return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
+            return PartialView(model);
         }
 
         // POST: Bundle/Create
@@ -104,6 +127,64 @@ namespace LogisticsApp.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AdminCreate([Bind(Include = "Order,OrderDate,BundleQuantity,MarketName,TrackNumber,Price,Invoice,Description,Category,Country,Valuta")] BundleCreateModel model)
+        {
+            Bundle bundle = null;
+            
+            if (ModelState.IsValid)
+            {
+                if (model.OrderDate > DateTime.Now || model.Invoice == null || model.Invoice.ContentLength < 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                try
+                {
+                    bundle = new Bundle();
+
+                    bundle.Customer = db.orders.Single(s => s.Id == model.Order).customer;
+                    bundle.MarketName = model.MarketName;
+                    bundle.Price = model.Price;
+                    bundle.TrackNumber = model.TrackNumber;
+                    bundle.Description = model.Description;
+                    bundle.BundleQuantity = model.BundleQuantity;
+                    bundle.Category = db.categories.Single(s => s.Id == model.Category);
+                    bundle.Country = db.countries.Single(s => s.Id == model.Country && s.isActive == true);
+                    bundle.Valuta = db.valutas.Single(s => s.Id == model.Valuta && s.isActive == true);
+                    bundle.CreatedDate = DateTime.Now;
+                    bundle.OrderDate = model.OrderDate;
+                    
+                    bundle.addStatus(new Status
+                    {
+                        CreatedDate = DateTime.Now,
+                        Name = "ordered"
+                    });
+                    var fileExtension = Path.GetExtension(model.Invoice.FileName);
+                    var fileName = Path.GetFileNameWithoutExtension(model.Invoice.FileName) + "-" +
+                        DateTime.Now.ToString("yyyyMMddHHmmssfff") + fileExtension;
+                    var fullpath = Path.GetFullPath(Server.MapPath("/Img/Invoice/"));
+                    var directoryName = fullpath + bundle.Customer.CustomerNumber;
+                    Directory.CreateDirectory(directoryName);
+                    var path = Path.Combine(Server.MapPath("/Img/Invoice/" + bundle.Customer.CustomerNumber), fileName);
+                    model.Invoice.SaveAs(path);
+                    bundle.InvoiceFilePath = "/Img/Invoice/" + bundle.Customer.CustomerNumber + "/" + fileName;
+                    db.bundles.Add(bundle);
+                    db.SaveChanges();
+                    var order = db.orders.Single(s => s.Id == model.Order);
+                    var readybundle = db.bundles.Single(s => s.TrackNumber == model.TrackNumber&&s.OrderDate==model.OrderDate&&s.MarketName==model.MarketName);
+                    order.BundleId = readybundle.Id;
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                }
+            }
+            return RedirectToAction("List","Order");
+        }
+
 
         [HttpPost]
         public ActionResult Search(string filter)

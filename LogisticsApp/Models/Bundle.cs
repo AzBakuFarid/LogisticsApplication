@@ -75,6 +75,9 @@ namespace LogisticsApp.Models
     }
     public class BundleCreateModel {
 
+       
+        public int Order { get; set; }
+
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime OrderDate { get; set; }
