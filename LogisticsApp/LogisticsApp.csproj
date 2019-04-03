@@ -188,6 +188,7 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\StepsController.cs" />
     <Compile Include="Controllers\TaariffController.cs" />
     <Compile Include="Global.asax.cs">
@@ -209,6 +210,7 @@
     <Compile Include="Models\Page\Search.cs" />
     <Compile Include="Models\Page\Step.cs" />
     <Compile Include="Models\Page\Taariff.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\Bundle.cs" />
     <Compile Include="Models\BundleStatus.cs" />
@@ -294,6 +296,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Img\country\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

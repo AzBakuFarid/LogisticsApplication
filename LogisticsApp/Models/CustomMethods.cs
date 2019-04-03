@@ -63,13 +63,13 @@ namespace LogisticsApp.Models
             int a = 0;
             double b = 0;
             double max = taariffs.Max(m => m.Weight);
-            if (weight > max)
+            if (weight >= max)
             {
                 b = weight % max;
                 a = (int)(weight * 100 - b)/100;
             }
             double result1 = a * taariffs.First(f => f.Weight == max).Price;
-            double result2=taariffs.Where(w => w.Weight >= b).First().Price;
+            double result2 = b == 0 ? 0: taariffs.Where(w => w.Weight >= b).First().Price;
             return result1+result2;
         }
         public static bool regexControl(this string _string, string pattern) {
