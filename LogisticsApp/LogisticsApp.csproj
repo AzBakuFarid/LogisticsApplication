@@ -296,7 +296,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Img\country\" />
-    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -375,6 +374,7 @@
     <Content Include="Views\Order\Search.cshtml" />
     <Content Include="Views\Payment\AdminPaymentForOrder.cshtml" />
     <Content Include="Views\Bundle\AdminCreate.cshtml" />
+    <Content Include="Views\Settings\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

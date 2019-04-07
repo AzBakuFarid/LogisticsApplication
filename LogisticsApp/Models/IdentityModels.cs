@@ -68,6 +68,7 @@ namespace LogisticsApp.Models
         public DbSet<Market> markets { get; set; }
         public DbSet<Status> statuses { get; set; }
         public DbSet<Valuta> valutas { get; set; }
+        public DbSet<Settings> settings { get; set; }
 
     }
 }

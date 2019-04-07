@@ -68,10 +68,10 @@ namespace LogisticsApp.Controllers
 
                 db.carusel.Add(carusel);
                 db.SaveChanges();
-                ViewBag.AlertMessage = "creation has ended succesfully";
+                TempData["AlertMessage"] = "The Carusel has created succesfully";
                 return RedirectToAction("List");
             }
-            ViewBag.AlertMessage = "Something gone wrong. Try again please!";
+            TempData["AlertMessage"] = "Something gone wrong. Try again please!";
             return RedirectToAction("List");
         }
 
@@ -101,10 +101,10 @@ namespace LogisticsApp.Controllers
                     carusel.ImgPath = "/Img/carusel/" + fileName;
                 }
                 db.SaveChanges();
-                ViewBag.AlertMessage = "changes has ended succesfully";
+                TempData["AlertMessage"] = "changes has ended succesfully";
                 return RedirectToAction("List");
             }
-            ViewBag.AlertMessage = "Something gone wrong. Try again please!";
+            TempData["AlertMessage"] = "Something gone wrong. Try again please!";
             return RedirectToAction("List");
         }
 
@@ -124,6 +124,7 @@ namespace LogisticsApp.Controllers
             }
             db.carusel.Remove(carusel);
             db.SaveChanges();
+            TempData["AlertMessage"] = "The Carusel has deleted";
             return RedirectToAction("List");
         }
 
