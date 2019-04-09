@@ -170,8 +170,6 @@ $(document).ready(function () {
             $("#CaruselDetailsModalImage").attr("src", res.Image);
             $("#CaruselDetailsModalLong").show();
         })
-
-
     })
     $(".CaruselDeleteBtn").on("click", function () {
         let id = $(this).attr("data-id");
@@ -412,5 +410,33 @@ $(document).ready(function () {
         })
     })
 
+    $("#SaveActiveNewsBtn").on("click", function () {
+        let selecteds = [];
+        $.each($("#AdminNews input[type='checkbox']:checked"), function () {
+            selecteds.push($(this).attr("data-id"));
+        });
+        $.ajax({
+            url: "/News/ChangeActivityStatus/",
+            method: "POST",
+            dataType: 'json',
+            data: { id: selecteds }
+        }).done(function (res) {
+            window.location.href = res;
+        })
+    })
+    $(".NewsDetailsBtn").on("click", function (e) {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/News/Edit/",
+            method: "GET",
+            data: { id: id }
+        }).done(function (res) {
+            $("#NewsDetailsModalLong .modal-body").html(res);
+        })
+    })
+    $(".NewsDeleteBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $("#NewsDeleteModalId").val(id);
+    })
 
 })

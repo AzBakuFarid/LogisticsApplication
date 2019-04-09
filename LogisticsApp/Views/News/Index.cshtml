@@ -12,14 +12,16 @@
             @foreach (var item in Model)
             {
                 var date = (item.Modified != null) ? item.Modified : item.Created;
-                string text;
+                string text, title;
                 if (item.Text.Length > 80) { text = item.Text.Substring(0, 70) + "..."; }
                 else { text = item.Text; }
+                if (item.Title.Length > 20) { title = item.Title.Substring(0, 18) + "..."; }
+                else { title = item.Title; }
 
                 <div class="col-xs-12 newsContentGeneral" style="width:30%;">
                     <div class="row newsImg"><img src="@item.PicturePath" alt="nopicture"></div>
                     <div class="row newsTitle">
-                        <span>@item.Title</span>
+                        <span>@title</span>
                     </div>
                     <div class="row newsDate">
                         <span>

@@ -1,4 +1,21 @@
-﻿<!DOCTYPE html>
+﻿
+@{ 
+
+    LogisticsApp.Models.ApplicationDbContext db = new LogisticsApp.Models.ApplicationDbContext();
+    var logo= db.settings.FirstOrDefault() != null ? db.settings.First().Logo : " ";
+    var facebook =  " ";
+    var instagram = " ";
+    var contact = db.contacts.FirstOrDefault();
+    if (contact != null)
+    {
+        facebook = contact.Facebook;
+        instagram = contact.Instagram;
+    }
+
+
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,7 +34,7 @@
         <div class="row">
             <div class="col-md-2">
                 <a href="/Home/Index">
-                    <img src="~/img/logo.jpg" alt="logo" width="50" height="50" class="offset-5">
+                    <img src="@logo" alt="logo" width="50" height="50" class="offset-5">
                 </a>
             </div>
             <div class="col-md-4" style="padding:5px;">
@@ -98,13 +115,13 @@
     <section id="footer" class="container container-fluid ">
         <div class="row">
             <div>
-                <img src="~/img/logo.jpg" alt="logo" width="50" height="50" class="offset-5">
+                <img src="@logo" alt="logo" width="50" height="50" class="offset-5">
             </div>
             <div class="offset-8 ml-auto">
-                <a href="@ViewBag.ContactFB">
+                <a href="@facebook">
                     <img src="~/img/footer/facebook.png" alt="" srcset="">
                 </a>
-                <a href="@ViewBag.ContactIG">
+                <a href="@instagram">
                     <img src="~/img/footer/instagram.png" alt="" srcset="">
                 </a>
                 <img src="~/img/footer/mastercard.png" alt="">

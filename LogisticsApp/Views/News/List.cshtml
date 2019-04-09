@@ -1,0 +1,94 @@
+﻿@model IEnumerable<LogisticsApp.Models.Page.News>
+
+@{
+
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+}
+
+<div id="AdminNews">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">isActive</th>
+                <th scope="col">Editing</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string isactive = "";
+                string text = " ";
+                if (item.isActive) { isactive = "checked=checked"; }
+                else { isactive = ""; }
+                if (item.Title.Length > 40) { text = item.Title.Substring(0, 38)+" ..."; }
+                else { text = item.Title; }
+
+                <tr>
+                    <td>@text</td>
+                    <td>
+                        <div class="">
+                            <input type="checkbox" class="" data-id="@item.Id" @isactive>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm NewsDetailsBtn" data-toggle="modal" data-target="#NewsDetailsModalLong" data-id="@item.Id">view/edit</button>
+                        <button class="btn btn-danger btn-sm NewsDeleteBtn" data-toggle="modal" data-target="#NewsDeleteModal" data-id="@item.Id">del</button>
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <button type="button" id="SaveActiveNewsBtn" class="btn btn-primary">Yadda saxla</button>
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#NewsCreateModal">Yenisini yarat</button>
+
+</div>
+
+
+<div class="modal fade" id="NewsDetailsModalLong" tabindex="-1" role="dialog" aria-labelledby="NewsDetailsModalLongLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="NewsDetailsModalLongLabel">News details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+ @* bura ajax ile content gelir *@
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="NewsDeleteModal" tabindex="-1" role="dialog" aria-labelledby="NewsDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("Delete", "News", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="NewsDeleteModalId" name="id" value="" />
+                    <div class="form-group">
+                        Bu melumatlari silmekde eminsenmi ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Xeyr</button>
+                        <button type="submit" id="" class="btn btn-primary" data-id="">Beli</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+    @Html.Action("Create", "News")

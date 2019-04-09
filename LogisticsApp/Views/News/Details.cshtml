@@ -3,9 +3,7 @@
 @{
     ViewBag.Title = "News";
     DateTime DateSingle = @Model.Modified != null ? (DateTime)@Model.Modified : @Model.Created;
-    var DateSingleView = DateSingle.Day + "." +
-                          DateSingle.Month.ToString() + "." +
-                          DateSingle.Year.ToString();
+
 }
 
 <section id="newspage" class="container container-fluid ">
@@ -16,7 +14,7 @@
                 <div class="col-md-8">
                     <div class="boxShadow">
                         <h3>@Model.Title</h3>
-                        <span>@DateSingleView</span>
+                        <span>@DateSingle.ToString("dd.MM.yyyy")</span>
                         <p>
                             @Model.Text
                         </p>
@@ -32,28 +30,33 @@
                     </div>
                     @foreach (var item in ViewBag.LatesNews)
                     {
+                        string title;
+
+                        if (item.Title.Length > 20)
+                        {
+                            title = item.Title.Substring(0, 18) + "...";
+                        }
+
+                        else { title = item.Title; }
                         DateTime DateMultiple = item.Modified != null ? (DateTime)@item.Modified : @item.Created;
-                        var DateMultipleView = DateMultiple.Day + "." +
-                            DateMultiple.Month.ToString() + "." +
-                            DateMultiple.Year.ToString();
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row newsItem">
-                                    <div class="col-md-4 newsItemImage">
-                                        <img src="@item.PicturePath" width="60px" height="60px" alt="">
-                                    </div>
-                                    <div class="col-md-8 newsContent">
-                                        <p>@item.Title</p>
-                                        <a href="/News/Details/@item.Id"> etrafli oxu > </a>
-                                        <span id="newsCreatedTime">@DateMultipleView</span>
-                                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row newsItem">
+                                <div class="col-md-4 newsItemImage">
+                                    <img src="@item.PicturePath" width="60px" height="60px" alt="">
+                                </div>
+                                <div class="col-md-8 newsContent">
+                                    <p>@title</p>
+                                    <a href="/News/Details/@item.Id"> etrafli oxu > </a>
+                                    <span id="newsCreatedTime">@DateMultiple.ToString("dd.MM.yyyy")</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     }
-
-
-
                 </div>
             </div>
         </div>

@@ -375,6 +375,9 @@
     <Content Include="Views\Payment\AdminPaymentForOrder.cshtml" />
     <Content Include="Views\Bundle\AdminCreate.cshtml" />
     <Content Include="Views\Settings\Edit.cshtml" />
+    <Content Include="Views\News\List.cshtml" />
+    <Content Include="Views\News\Create.cshtml" />
+    <Content Include="Views\News\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

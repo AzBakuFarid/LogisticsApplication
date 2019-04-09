@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -20,32 +21,35 @@ namespace LogisticsApp.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-           
-
             return View(db.news.Where(w=>w.isActive == true).ToList());
+        }
+
+        //GET: News
+        public ActionResult List()
+        {
+            return View(db.news.ToList());
         }
 
         // GET: News/Details/5
         [AllowAnonymous]
         public ActionResult Details(int? id)
         {
-            if (id == null)
+            try
+            {
+                News news = db.news.Single(s => s.Id == id && s.isActive == true);
+                ViewBag.LatesNews = db.news.Where(w => w.isActive == true).OrderByDescending(o => o.Created).Take(5).ToList();
+                return View(news);
+            }
+            catch (Exception)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            News news = db.news.Find(id);
-            if (news == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.LatesNews = db.news.Where(w => w.isActive == true).OrderByDescending(o => o.Created).Take(5).ToList();
-            return View(news);
         }
 
         // GET: News/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView(new NewsCreateModel());
         }
 
         // POST: News/Create
@@ -53,16 +57,33 @@ namespace LogisticsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Text,Created,Modified")] News news)
+        public ActionResult Create([Bind(Include = "Title,Text,File")] NewsCreateModel model)
         {
+
             if (ModelState.IsValid)
             {
+                News news = new News {
+                    Title = model.Title,
+                    Text = model.Text,
+                    Created=DateTime.Now,
+                    Modified=DateTime.Now
+                };
+                if (model.File != null && model.File.ContentLength > 0)
+                {
+                    var fileExtension = Path.GetExtension(model.File.FileName);
+                    var fileName = Path.GetFileNameWithoutExtension(model.File.FileName) + "-" +
+                        DateTime.Now.ToString("yyyyMMdd_HHmmssfff") + fileExtension;
+                    var path = Path.Combine(Server.MapPath("~/Img/news"), fileName);
+                    model.File.SaveAs(path);
+                    news.PicturePath = "/Img/news/" + fileName;
+                }
                 db.news.Add(news);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["AlertMessage"] = "The News has created succesfully";
+                return RedirectToAction("List");
             }
-
-            return View(news);
+            TempData["AlertMessage"] = "Something gone wrong. Try again please!";
+            return RedirectToAction("List");
         }
 
         // GET: News/Edit/5
@@ -77,7 +98,13 @@ namespace LogisticsApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(news);
+            NewsEditModel model = new NewsEditModel {
+                Title=news.Title,
+                Text=news.Text,
+                Id=news.Id,
+                ImagePath=news.PicturePath
+            };
+            return PartialView(model);
         }
 
         // POST: News/Edit/5
@@ -85,19 +112,39 @@ namespace LogisticsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Text,Created,Modified")] News news)
+        public ActionResult Edit([Bind(Include = "Id,Title,Text,File")] NewsEditModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(news).State = EntityState.Modified;
+                News news = db.news.Single(s => s.Id == model.Id);
+                if (news == null)
+                {
+                    return HttpNotFound();
+                }
+                news.Title = model.Title;
+                news.Text = model.Text;
+                if (model.File != null && model.File.ContentLength > 0)
+                {
+                    var fileExtension = Path.GetExtension(model.File.FileName);
+                    var fileName = Path.GetFileNameWithoutExtension(model.File.FileName) + "-" +
+                        DateTime.Now.ToString("yyyyMMdd_HHmmssfff") + fileExtension;
+                    var path = Path.Combine(Server.MapPath("~/Img/news"), fileName);
+                    model.File.SaveAs(path);
+                    news.PicturePath = "/Img/news/" + fileName;
+                }
+                news.Modified = DateTime.Now;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["AlertMessage"] = "changes has ended succesfully";
+                return RedirectToAction("List");
             }
-            return View(news);
+            TempData["AlertMessage"] = "Something gone wrong. Try again please!";
+            return RedirectToAction("List");
         }
 
-        // GET: News/Delete/5
-        public ActionResult Delete(int? id)
+        // POST: News/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int? id)
         {
             if (id == null)
             {
@@ -108,18 +155,36 @@ namespace LogisticsApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(news);
-        }
-
-        // POST: News/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            News news = db.news.Find(id);
             db.news.Remove(news);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            TempData["AlertMessage"] = "The News has deleted";
+            return RedirectToAction("List");
+        }
+
+        [HttpPost]
+        public ActionResult ChangeActivityStatus(string[] id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var news = db.news.ToList();
+            try
+            {
+                foreach (var item in news)
+                {
+                    if (id.Any(a => a == item.Id.ToString())) { item.isActive = true; }
+                    else { item.isActive = false; }
+                    if (String.IsNullOrEmpty(item.PicturePath)) { item.isActive = false; }
+                }
+            }
+            catch (Exception)
+            {
+                return Json(Url.Action("List", "News"));
+            }
+            db.SaveChanges();
+            return Json(Url.Action("List", "News"));
         }
 
         protected override void Dispose(bool disposing)
