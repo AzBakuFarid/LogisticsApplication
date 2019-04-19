@@ -7,9 +7,12 @@
 }
 
 <div id="AdminOrdersAll">
+    <button type="button" class="btn btn-warning" id="AdminCreateInvoiceBtn" disabled data-toggle="modal" data-target="#declarationModal">Create declaration</button>
+
     <table class="table table-bordered table-striped">
         <thead class="thead-light">
             <tr>
+                <th scope="col"></th>
                 <th scope="col">Customer</th>
                 <th scope="col">Custm. ID</th>
                 <th scope="col">Country</th>
@@ -22,6 +25,9 @@
             @foreach (var item in Model.Where(w => w.Bundle == 0).ToList())
             {
                 <tr>
+                    <td>
+                        <input type="checkbox" class="AdminSelectedOrdersForDecloration" data-id="@item.Id">
+                    </td>
                     <td>
                         @item.Customer.Name @item.Customer.Surname
                     </td>
@@ -50,7 +56,6 @@
                             {
                                 <button type="button" class="btn btn-success btn-sm AdminOrderPaymentBtn" data-toggle="modal" data-target="#AdminOrderPaymentModal" data-id="@item.Id">Pay</button>
                             }
-                            <button type="button" class="btn btn-info btn-sm AdminCreateInvoiceBtn" data-toggle="modal" data-target="#declarationModal" data-id="@item.Id">Invoice</button>
                         </div>
                     </td>
 
@@ -103,6 +108,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="AdminOrderDeleteModal" tabindex="-1" role="dialog" aria-labelledby="AdminOrderDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -130,14 +136,9 @@
         </div>
     </div>
 </div>
-<div class="modal fade bd-example-modal-lg" id="declarationModal" tabindex="-1" role="dialog" aria-labelledby="declarationModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            @* bura ajax ile content gelir *@
-        </div>
-    </div>
-</div>
+
+
+
 <div class="modal fade" id="AdminOrderPaymentModal" tabindex="-1" role="dialog" aria-labelledby="AdminOrderPaymentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -154,11 +155,12 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade bd-example-modal-lg" id="declarationModal" tabindex="-1" role="dialog" aria-labelledby="declarationModal"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            @* bura ajax ile content gelir *@
+     
         </div>
     </div>
 </div>

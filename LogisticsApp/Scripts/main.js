@@ -8,7 +8,10 @@ $(document).ready(function () {
             document.getElementById("goUp").style.display = "none";
         }
     }
+    $(document).on("click", "[data-dismiss='modal']", function () {
+        $(".modal").hide();
 
+    })
     $("#Calculate").on("click", function () {
         let model = {
             CountryId: $("#calculator #countryId").val(),
@@ -211,6 +214,35 @@ $(document).ready(function () {
         $("#ForumDeleteModalId").val(id);
     })
 
+    $("#SaveActiveNewsBtn").on("click", function () {
+        let selecteds = [];
+        $.each($("#AdminNews input[type='checkbox']:checked"), function () {
+            selecteds.push($(this).attr("data-id"));
+        });
+        $.ajax({
+            url: "/News/ChangeActivityStatus/",
+            method: "POST",
+            dataType: 'json',
+            data: { id: selecteds }
+        }).done(function (res) {
+            window.location.href = res;
+        })
+    })
+    $(".NewsDetailsBtn").on("click", function (e) {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/News/Edit/",
+            method: "GET",
+            data: { id: id }
+        }).done(function (res) {
+            $("#NewsDetailsModalLong .modal-body").html(res);
+        })
+    })
+    $(".NewsDeleteBtn").on("click", function () {
+        let id = $(this).attr("data-id");
+        $("#NewsDeleteModalId").val(id);
+    })
+
     $(".countryInfoBtn").on("click", function () {
         let id = $(this).attr("data-id");
         $.ajax({
@@ -399,44 +431,87 @@ $(document).ready(function () {
         })
 
     })
-    $(".AdminCreateInvoiceBtn").on("click", function () {
-        let id = $(this).attr("data-id");
+    $(".AdminSelectedOrdersForDecloration").on("change", function (e) {
+        if ($(".AdminSelectedOrdersForDecloration:checked").length > 0) {
+            $("#AdminCreateInvoiceBtn").removeAttr("disabled")
+        }
+        else { $("#AdminCreateInvoiceBtn").attr("disabled", "") }
+    })
+    $("#AdminCreateInvoiceBtn").on("click", function () {
+        let selectedOrders = [];
+        $.each($(".AdminSelectedOrdersForDecloration:checked"), function () {
+            selectedOrders.push($(this).attr("data-id"));
+        })
+        console.log(selectedOrders)
+        jQuery.ajaxSettings.traditional = true
         $.ajax({
             url: "/Bundle/AdminCreate/",
             method: "GET",
-            data: {_order:id}
+            data: { selecteds: selectedOrders },
+            contentType: 'application/json; charset=utf-8'
         }).done(function (res) {
             $("#declarationModal .modal-content").html(res);
         })
+
     })
 
-    $("#SaveActiveNewsBtn").on("click", function () {
-        let selecteds = [];
-        $.each($("#AdminNews input[type='checkbox']:checked"), function () {
-            selecteds.push($(this).attr("data-id"));
-        });
-        $.ajax({
-            url: "/News/ChangeActivityStatus/",
-            method: "POST",
-            dataType: 'json',
-            data: { id: selecteds }
-        }).done(function (res) {
-            window.location.href = res;
-        })
-    })
-    $(".NewsDetailsBtn").on("click", function (e) {
+
+    $("button#AdminBundleAddStatus").on("click", function () {
         let id = $(this).attr("data-id");
         $.ajax({
-            url: "/News/Edit/",
+            url: "/Status/Create/",
             method: "GET",
             data: { id: id }
         }).done(function (res) {
-            $("#NewsDetailsModalLong .modal-body").html(res);
+            $("#AdminStatusAddModal .modal-body").html(res);
         })
     })
-    $(".NewsDeleteBtn").on("click", function () {
+    $("button#AdminBundleEditStatus").on("click", function () {
         let id = $(this).attr("data-id");
-        $("#NewsDeleteModalId").val(id);
+        $.ajax({
+            url: "/Status/Edit/",
+            method: "GET",
+            data: { id: id }
+        }).done(function (res) {
+            $("#AdminStatusEditModal .modal-body").html(res);
+        })
     })
+    $("button#AdminBundleDelStatus").on("click", function () {
+        let id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Status/Delete/",
+            method: "GET",
+            data: { id: id }
+        }).done(function (res) {
+            $("#AdminStatusDelModal .modal-body").html(res);
+        })
+    })
+    $(document).on("change", "#AdminStatusModal select#StatusDateInEditMode", function () {
+        let name = $(this).val();
+        console.log(name)
+        let bundle = $("input[name='Bundle']").val();
+        $.ajax({
+            url: "/Status/GetStatusDate/",
+            method: "GET",
+            data: { _name: name, _bundle:bundle }
+        }).done(function (res) {
+            $("#AdminStatusModal .modal-body #OrderDate").val(res.date);
+        })
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 })

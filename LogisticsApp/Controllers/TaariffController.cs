@@ -140,7 +140,7 @@ namespace LogisticsApp.Controllers
                 else {
                     result = Math.Round(model.Weight.CalculateBundlePrice(taariff) * model.BundleCount, 2);
                 }
-                return Json(new { Value = result+" " }, JsonRequestBehavior.AllowGet);
+                return Json(new { Value = result }, JsonRequestBehavior.AllowGet);
             }
 
 

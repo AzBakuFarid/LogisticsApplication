@@ -11,13 +11,13 @@ namespace LogisticsApp.Models
     {
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime OrderDate { get; set; }
         public int BundleQuantity { get; set; }
         public string MarketName { get; set; }
         public string TrackNumber { get; set; }
         public double Price { get; set; }
         public string InvoiceFilePath { get; set; }
         public string Description { get; set; }
+        public bool isPaid { get; set; }
 
 
         public int CategoryId { get; set; }
@@ -57,7 +57,7 @@ namespace LogisticsApp.Models
             if (Statuses != null&& _status != null) {
                 Status st = Statuses.FirstOrDefault(f => f.Name.Equals(_status.Name));
                 if (st != null) {
-                    st = _status;
+                    st.CreatedDate = _status.CreatedDate;
                 }
             }
         }
@@ -69,14 +69,21 @@ namespace LogisticsApp.Models
                 if (st != null)
                 {
                     Statuses.Remove(st);
+                    ICollection<Status> temp = new List<Status>();
+                    foreach (var item in Statuses)
+                    {
+                        if (item != null) {
+                            temp.Add(item);
+                        }
+                    }
+                    Statuses = temp;
                 }
             }
         }
     }
     public class BundleCreateModel {
 
-       
-        public int Order { get; set; }
+        public IEnumerable<int> Orders { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
@@ -111,5 +118,35 @@ namespace LogisticsApp.Models
 
         [Required]
         public int Valuta { get; set; }
+    }
+
+    public class BundleViewModel {
+
+        public int Id { get; set; }
+
+        public List<Order> Orders { get; set; }
+
+        public DateTime OrderDate { get; set; }
+
+        public int BundleQuantity { get; set; }
+
+        public string MarketName { get; set; }
+
+        public string TrackNumber { get; set; }
+
+        public double Price { get; set; }
+
+        public string Invoice { get; set; }
+
+        public string Description { get; set; }
+
+        public bool isPaid { get; set; }
+
+        public List<Status> Statuses { get; set; }
+        public  Category Category { get; set; }
+        public  Country Country { get; set; }
+        public  Valuta Valuta { get; set; }
+        public  ApplicationUser Customer { get; set; }
+
     }
 }

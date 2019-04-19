@@ -5,9 +5,12 @@
 .capitalize {
     text-transform:capitalize;
 }
+a[type="button"] {
+    border-radius:5px;
+}
 .underlined-bold {
-   font-weight:bold; 
-   text-decoration:underline;
+    font-weight: bold;
+    text-decoration: underline;
 }
 .position-relative{
     position: relative;
@@ -375,4 +378,32 @@ margin: 20px;
 .AdminOrderActionBtns {
 display:none;
 z-index:1000;
+}
+
+#AdminCreateInvoiceBtn {
+    margin:20px 0;
+}
+
+#orderedCounter {
+
+    font-size:30px;
+    color:greenyellow;
+    font-weight:bold;
+}
+
+#AdminBundleDetails #customerName, #AdminBundleDetails #customerBalance {
+    display: inline-block;
+    background-color: grey;
+    color: black;
+    font-weight: bold;
+    font-stretch: expanded;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 0 20px 20px 20px;
+}
+
+#AdminBundleDetails #customerBalance {
+    background-color: blue;
+    color: white;
 }

@@ -10,20 +10,21 @@
             @foreach (var item in Model)
             {
                 var imgUrl = item.PicturePath.Replace("\\", "/");
+                string title = item.Title;
                 DateTime DateSingle = item.Modified != null ? (DateTime)item.Modified : item.Created;
-                var DateSingleView = DateSingle.Day + "." +
-                                      DateSingle.Month.ToString() + "." +
-                                      DateSingle.Year.ToString();
+                if (item.Title.Length > 20) {
+                    title = item.Title.Substring(0, 18) + "...";
+                }
                 <div class="col-md-4 col-xs-12 ">
                     <div class="row ">
                        
                         <div class="col-md-4 newsImg" style="background-image:url('@imgUrl')"></div>
                         <div class="col-md-8 newsContent">
-                            <p>@item.Title</p>
+                            <p>@title</p>
 
                     
                             <a href="/Home/RootTo/@item.Id"> etrafli oxu > </a>
-                            <span id="newsCreatedTime">@DateSingleView</span>
+                            <span id="newsCreatedTime">@DateSingle.ToString("dd.MM.yyyy")</span>
                         </div>
                     </div>
                 </div>

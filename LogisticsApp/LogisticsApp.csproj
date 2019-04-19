@@ -189,6 +189,7 @@
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\StepsController.cs" />
     <Compile Include="Controllers\TaariffController.cs" />
     <Compile Include="Global.asax.cs">
@@ -378,6 +379,15 @@
     <Content Include="Views\News\List.cshtml" />
     <Content Include="Views\News\Create.cshtml" />
     <Content Include="Views\News\Edit.cshtml" />
+    <Content Include="Views\Bundle\List.cshtml" />
+    <Content Include="Views\Bundle\AdminDetails.cshtml" />
+    <Content Include="Views\Status\Create.cshtml" />
+    <Content Include="Views\Status\Delete.cshtml" />
+    <Content Include="Views\Status\Details.cshtml" />
+    <Content Include="Views\Status\Edit.cshtml" />
+    <Content Include="Views\Status\Index.cshtml" />
+    <Content Include="Views\Bundle\BundleSize.cshtml" />
+    <Content Include="Views\Payment\AdminPaymentForBundle.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

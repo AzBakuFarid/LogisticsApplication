@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @{
     Layout = "~/Views/Shared/AdminLayout.cshtml";
+    int orderedCounter = (new LogisticsApp.Models.ApplicationDbContext()).orders.Count(w => w.BundleId == 0);
 
 }
 
@@ -8,7 +9,7 @@
     <div class="row" style="height:150px;">
         <div class="col-md-3 col-xs-12"></div>
         <div class="col-md-3 col-xs-12" style="z-index:1000">
-            <input type="text" id="BundleSearch" class="adminHeaderSearch" placeholder="enter bundle ID" title="Type in bundle number">
+            <input type="text" id="BundleSearch" class="adminHeaderSearch" placeholder="enter bundle ID or tracknumber" title="Type in bundle number">
             <ul id="BundleSearchResult" class="adminHeaderSearchResult" style="display:none">
                 @* bura ajax ile dolur *@
 
@@ -41,10 +42,9 @@
                 <div class="col-md-2">
                     <div class="row">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action active" id="list-orders-list" href="/Order/List" role="tab">Orders <span id="orderedCounter"></span></a>
-                            <a class="list-group-item list-group-item-action" id="list-users-list" href="/Users/List" role="tab">Users</a>
-                            <a class="list-group-item list-group-item-action" id="list-taariffs-list" href="/Taariff/List" role="tab">Taariffs</a>
+                            <a class="list-group-item list-group-item-action active" id="list-orders-list" href="/Order/List" role="tab">Orders <span id="orderedCounter">(@orderedCounter)</span></a>
                             <a class="list-group-item list-group-item-action" id="list-about-list" href="/Abouts/List" role="tab">About</a>
+                            <a class="list-group-item list-group-item-action" id="list-bundle-list" href="/Bundle/List" role="tab">Bundles</a>
                             <a class="list-group-item list-group-item-action" id="list-contact-list" href="/Contact/List" role="tab">Contact</a>
                             <a class="list-group-item list-group-item-action" id="list-carusel-list" href="/Carusels/List" role="tab">Carusel</a>
                             <a class="list-group-item list-group-item-action" id="list-forum-list" href="/FAQ/List" role="tab">Forum</a>
@@ -52,6 +52,8 @@
                             <a class="list-group-item list-group-item-action" id="list-settings-list" href="/Settings/Edit" role="tab">Settings</a>
                             <a class="list-group-item list-group-item-action" id="list-messages-list" href="/Messages/List" role="tab">Messages</a>
                             <a class="list-group-item list-group-item-action" id="list-inquerires-list" href="/Inquery/List" role="tab">Inqueries</a>
+                            <a class="list-group-item list-group-item-action" id="list-users-list" href="/Users/List" role="tab">Users</a>
+                            <a class="list-group-item list-group-item-action" id="list-taariffs-list" href="/Taariff/List" role="tab">Taariffs</a>
                         </div>
                     </div>
                 </div>

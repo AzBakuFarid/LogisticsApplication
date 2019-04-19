@@ -1,0 +1,30 @@
+﻿@model LogisticsApp.Models.Bundle
+@{
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+}
+<section class="container container-fluid">
+    <div>
+        @using (Html.BeginForm("AdminPaymentForBundle", "Payment", FormMethod.Post,
+                                    new { enctype = "multipart/form-data", @class="col-md-6 col-xs-12" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="bundle" value="@Model.Id" />
+            <div class="form-group">
+                <label>Baglamanin deyeri: </label>
+                <input type="number" name="amount" class="form-control" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="paymentMethod" required>
+                    <option value="">Select payment method</option>
+                    <option value="userbalance">From user balance</option>
+                    <option value="cash">Cash</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-secondary" type="submit" >Pay</button>
+            </div>
+        }
+    </div>
+</section>
+
+

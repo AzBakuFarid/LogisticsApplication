@@ -1,0 +1,34 @@
+﻿@model int
+
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            
+                <input type="hidden" name="Bundle" required value="@Model"/>
+                <div class="form-group">
+                    <label class="control-label">Status:</label>
+                    <select class="form-control" name="Name">
+                        <option value="">Statuslardan birini secin</option>
+                        <option value="inforeignstock">Xarici anbardadir</option>
+                        <option value="ontheway">Yoldadir</option>
+                        <option value="arrived">Bakiya catib</option>
+                        <option value="delivered">Tehvil verilib</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Date:</label>
+                    <input type="date" name="CreateDate" id="OrderDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" required class="form-control">
+                    <script>
+                        document.getElementById("OrderDate").max = new Date().toISOString().split("T")[0];
+                    </script>
+                </div>
+        
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-secondary">Create</button>
+            </div>
+        }
+
+

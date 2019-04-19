@@ -1,0 +1,217 @@
+﻿@model LogisticsApp.Models.BundleViewModel
+@{
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+    int linkCounter = 1;
+    string ispaid = "NO";
+    if (Model.isPaid)
+    {
+        ispaid = "YES";
+    }
+}
+
+<div id="AdminBundleDetails" class="container container-flued">
+
+    <div class="row">
+        <span id="customerName">@Model.Customer.Name @Model.Customer.Surname</span> 
+        <span id="customerBalance">@Model.Customer.Balance AZN</span>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AdminShowInvoiceModal" data-id="@Model.Id" style="margin:0 20px 20px 20px;">show invoice</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Country)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Country.Name)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.BundleQuantity)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BundleQuantity)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Category.Name)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OrderDate)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.TrackNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.TrackNumber)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Price)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Valuta)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Valuta.Name)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Orders)
+                </dt>
+                <dd>
+                    @foreach (var item in Model.Orders)
+                    {
+                        <a href="@item.Link">@("Link" + (linkCounter++))</a>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Statuses)
+                </dt>
+                <dd>
+                    @foreach (var status in Model.Statuses)
+                    {
+                        <span style="font-size:10px; display:block">@status.Name -> @status.CreatedDate.ToString("dd.MM.yyyy HH:mm:ss")</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.isPaid)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.isPaid)
+                    @ispaid
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <button type="button" class="btn btn-success" data-toggle="modal" id="AdminBundleAddStatus" data-target="#AdminStatusAddModal" data-id="@Model.Id" >Add status</button>
+    <button type="button" class="btn btn-warning" data-toggle="modal" id="AdminBundleEditStatus" data-target="#AdminStatusEditModal" data-id="@Model.Id" >Edit status</button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" id="AdminBundleDelStatus" data-target="#AdminStatusDelModal" data-id="@Model.Id" >Delete status</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" id="AdminBundleCreateDocument" data-target="#AdminCreateDocumentModal" data-id="@Model.Id" >Create document</button> @* bunun logicini hele basha dusmemisem*@
+
+    @if (Model.Statuses.Any(a => a.Name == "arrived") && Model.isPaid == false)
+    {
+    <a href="/Payment/AdminPaymentForBundle/@Model.Id" type="button" class="btn btn-secondary">Payment</a>
+    }
+
+
+</div>
+
+
+<div class="modal fade" id="AdminShowInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="AdminShowInvoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminShowInvoiceModalLabel">Bundle Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="@Model.Invoice" alt="Alternate Text" height="500px" width="500px" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AdminStatusAddModal" tabindex="-1" role="dialog" aria-labelledby="AdminStatusAddModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminStatusAddModalLabel">Adding status to bundle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AdminStatusEditModal" tabindex="-1" role="dialog" aria-labelledby="AdminStatusEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminStatusEditModalLabel">Edit the bundle's status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AdminStatusDelModal" tabindex="-1" role="dialog" aria-labelledby="AdminStatusDelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AdminStatusDelModalLabel">Delete the bundle's status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>

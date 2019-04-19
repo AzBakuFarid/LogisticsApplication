@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using LogisticsApp.Models;
@@ -17,11 +18,39 @@ namespace LogisticsApp.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Bundle
-        public ActionResult Index()
+        public async Task<ActionResult> List()
         {
-            var bundles = db.bundles.Include(b => b.Category).Include(b => b.Country).Include(b => b.Customer).Include(b => b.Valuta);
-            return View(bundles.ToList());
+            List<BundleViewModel> model = new List<BundleViewModel>();
+            try
+            {
+                foreach (var item in db.bundles.ToList())
+                {
+                    await Task.Run(() =>
+                    {
+                        model.Add(new BundleViewModel
+                        {
+                            Id = item.Id,
+                            Orders = db.orders.Where(w => w.BundleId == item.Id).ToList(),
+                            Price = item.Price,
+                            BundleQuantity = item.BundleQuantity,
+                            Description = item.Description,
+                            OrderDate = item.CreatedDate,
+                            Customer = item.Customer,
+                            Country = item.Country,
+                            Valuta = item.Valuta,
+                            Category = item.Category,
+                            Statuses = item.Statuses.ToList()
+                        });
+                    });
+                }
+                ViewBag.Bundles = db.bundles.ToList();
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return View(model);
         }
 
         // GET: Bundle/Details/5
@@ -39,6 +68,41 @@ namespace LogisticsApp.Controllers
             return View(bundle);
         }
 
+
+        // GET: Bundle/Details/5
+        public ActionResult AdminDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Bundle bundle = db.bundles.Find(id);
+            if (bundle == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new BundleViewModel {
+                Id=bundle.Id,
+                Country=bundle.Country,
+                Category=bundle.Category,
+                Valuta=bundle.Valuta,
+                Customer=bundle.Customer,
+                TrackNumber=bundle.TrackNumber,
+                Description=bundle.Description,
+                Price=bundle.Price,
+                Orders=db.orders.Where(w=>w.BundleId==bundle.Id).ToList(),
+                Statuses=bundle.Statuses.ToList(),
+                isPaid=bundle.isPaid,
+                Invoice=bundle.InvoiceFilePath,
+                BundleQuantity=bundle.BundleQuantity,
+                OrderDate=bundle.CreatedDate
+
+            };
+            return View(model);
+        }
+
+
         // GET: Bundle/Create
         [HttpGet]
         public ActionResult Create()
@@ -49,27 +113,7 @@ namespace LogisticsApp.Controllers
             return PartialView();
         }
 
-        [HttpGet]
-        public ActionResult AdminCreate(int _order)
-        {
-            OrderViewModel model = null;
-            try
-            {
-                Order item = db.orders.Single(s => s.Id == _order && s.isPaid == true);
-                model = new OrderViewModel {
-                    Id = item.Id,
-                    Price = item.Price,
-                    Quantity = item.Quantity,
-                    CreatedDate = item.CreatedDate.ToString("yyyy.MM.dd HH:mm:ss"),
-                    Customer = item.customer,
-                    Country = item.country,
-                    Valuta = item.valuta,
-                    Category = item.category,
-                };
-            }
-            catch (Exception){ return new HttpStatusCodeResult(HttpStatusCode.BadRequest); }
-            return PartialView(model);
-        }
+       
 
         // POST: Bundle/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -82,7 +126,7 @@ namespace LogisticsApp.Controllers
             string userId = null;
             if (ModelState.IsValid)
             {
-                if (model.OrderDate > DateTime.Now || model.Invoice == null || model.Invoice.ContentLength < 0) {
+                if (model.OrderDate > DateTime.Now || model.Invoice.ContentLength < 0) {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 try
@@ -99,12 +143,11 @@ namespace LogisticsApp.Controllers
                     bundle.Category = db.categories.Single(s => s.Id == model.Category);
                     bundle.Country = db.countries.Single(s => s.Id == model.Country && s.isActive == true);
                     bundle.Valuta = db.valutas.Single(s => s.Id == model.Valuta && s.isActive == true);
-                    bundle.CreatedDate = DateTime.Now;
-                    bundle.OrderDate = model.OrderDate;
+                    bundle.CreatedDate = model.OrderDate;
                    
                     bundle.addStatus(new Status
                     {
-                        CreatedDate = DateTime.Now,
+                        CreatedDate = bundle.CreatedDate,
                         Name = "ordered"
                     });
                     var fileExtension = Path.GetExtension(model.Invoice.FileName);
@@ -128,23 +171,54 @@ namespace LogisticsApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public ActionResult AdminCreate(IEnumerable<int> selecteds)
+        {
+            try
+            {
+                var model = new BundleViewModel();
+                List<Order> orders = db.orders.Where(w => w.BundleId == 0 && selecteds.Contains(w.Id)&&w.isPaid==true).ToList();
+                model.Orders = orders;
+                foreach (var item in orders)
+                {
+                    if (item.customer.CustomerNumber != orders[0].customer.CustomerNumber ||
+                        item.category.Id != orders[0].category.Id ||
+                        item.country.Id != orders[0].country.Id) { return HttpNotFound(); }
+                }
+
+                return PartialView(model);
+            }
+            catch (Exception) {  }
+            return HttpNotFound();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AdminCreate([Bind(Include = "Order,OrderDate,BundleQuantity,MarketName,TrackNumber,Price,Invoice,Description,Category,Country,Valuta")] BundleCreateModel model)
+        public ActionResult AdminCreate([Bind(Include = "Orders,OrderDate,BundleQuantity,MarketName,TrackNumber,Price,Invoice,Description,Category,Country,Valuta")] BundleCreateModel model)
         {
             Bundle bundle = null;
-            
+
             if (ModelState.IsValid)
             {
-                if (model.OrderDate > DateTime.Now || model.Invoice == null || model.Invoice.ContentLength < 0)
+                if (model.OrderDate > DateTime.Now || model.Invoice.ContentLength < 0)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 try
                 {
                     bundle = new Bundle();
+                    List<Order> orders = db.orders.Where(w => w.BundleId == 0 && model.Orders.Contains(w.Id)&&w.isPaid==true).ToList();
+                    foreach (var item in orders)
+                    {
+                        if (item.customer.CustomerNumber != orders[0].customer.CustomerNumber ||
+                            item.category.Id != orders[0].category.Id ||
+                            item.country.Id != orders[0].country.Id)
+                        {
+                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                        }
+                    }
 
-                    bundle.Customer = db.orders.Single(s => s.Id == model.Order).customer;
+                    bundle.Customer = orders[0].customer;
                     bundle.MarketName = model.MarketName;
                     bundle.Price = model.Price;
                     bundle.TrackNumber = model.TrackNumber;
@@ -153,17 +227,16 @@ namespace LogisticsApp.Controllers
                     bundle.Category = db.categories.Single(s => s.Id == model.Category);
                     bundle.Country = db.countries.Single(s => s.Id == model.Country && s.isActive == true);
                     bundle.Valuta = db.valutas.Single(s => s.Id == model.Valuta && s.isActive == true);
-                    bundle.CreatedDate = DateTime.Now;
-                    bundle.OrderDate = model.OrderDate;
-                    
+                    bundle.CreatedDate = model.OrderDate;
+
                     bundle.addStatus(new Status
                     {
-                        CreatedDate = DateTime.Now,
+                        CreatedDate = bundle.CreatedDate,
                         Name = "ordered"
                     });
                     var fileExtension = Path.GetExtension(model.Invoice.FileName);
                     var fileName = Path.GetFileNameWithoutExtension(model.Invoice.FileName) + "-" +
-                        DateTime.Now.ToString("yyyyMMddHHmmssfff") + fileExtension;
+                        DateTime.Now.ToString("yyyyMMdd_HHmmssfff") + fileExtension;
                     var fullpath = Path.GetFullPath(Server.MapPath("/Img/Invoice/"));
                     var directoryName = fullpath + bundle.Customer.CustomerNumber;
                     Directory.CreateDirectory(directoryName);
@@ -172,9 +245,11 @@ namespace LogisticsApp.Controllers
                     bundle.InvoiceFilePath = "/Img/Invoice/" + bundle.Customer.CustomerNumber + "/" + fileName;
                     db.bundles.Add(bundle);
                     db.SaveChanges();
-                    var order = db.orders.Single(s => s.Id == model.Order);
-                    var readybundle = db.bundles.Single(s => s.TrackNumber == model.TrackNumber&&s.OrderDate==model.OrderDate&&s.MarketName==model.MarketName);
-                    order.BundleId = readybundle.Id;
+                    var readybundle = db.bundles.Single(s => s.TrackNumber == model.TrackNumber && s.CreatedDate == model.OrderDate && s.MarketName == model.MarketName);
+                    foreach (var item in orders)
+                    {
+                         item.BundleId = readybundle.Id;
+                    }
                     db.SaveChanges();
                 }
                 catch (Exception)
@@ -182,7 +257,7 @@ namespace LogisticsApp.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
-            return RedirectToAction("List","Order");
+            return RedirectToAction("List", "Bundle");
         }
 
 
