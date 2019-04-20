@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LogisticsApp.Models;
 using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LogisticsApp.Controllers
 {
@@ -184,17 +185,22 @@ namespace LogisticsApp.Controllers
                         IDCardNumber = model.IDCardNumber,
                         FINNumber = model.FINNumber,
                         Balance = 0.00,
-                      };
-                    using (ApplicationDbContext db=new ApplicationDbContext()) {
+
+                    };
+                    using (ApplicationDbContext db = new ApplicationDbContext())
+                    {
                         if (db.Users.Count() < 1) user.CustomerNumber = 1000000;
-                        else user.CustomerNumber =  db.Users.Max(m => m.CustomerNumber) + 1;
-                        
+                        else user.CustomerNumber = db.Users.Max(m => m.CustomerNumber) + 1;
                     }
-                    if (user.CustomerNumber == 0) {
+                    if (user.CustomerNumber == 0)
+                    {
                         AddErrors(new IdentityResult("Something gone wrong with database connection... try again please!"));
                         return View(model);
                     }
-                        var result = await UserManager.CreateAsync(user, model.Password);
+                    var result = await (UserManager.CreateAsync(user, model.Password)).
+                        ContinueWith(task => UserManager.AddToRoleAsync(user.Id, "User"), TaskContinuationOptions.OnlyOnRanToCompletion).
+                        Result;
+
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -207,13 +213,40 @@ namespace LogisticsApp.Controllers
 
                         return RedirectToAction("Index", "Home");
                     }
-                AddErrors(result);
+                    AddErrors(result);
                 }
                 AddErrors(new IdentityResult("Hoqqa cixartma! Cinsde ne verilibse onlardan birini sec"));
             }
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        public async Task<ActionResult> GivePrivilege(int? _user, string _role) {
+
+            if (_user == null || _role == null)
+            {
+                return View("Error");
+            }
+            ApplicationUser user = null;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                user = db.Users.FirstOrDefault(f=>f.CustomerNumber==_user);
+            }
+            if (user == null) {
+                return HttpNotFound();
+            }
+            var curRoles = UserManager.GetRoles(user.Id).ToArray();
+            var result = await UserManager.RemoveFromRolesAsync(user.Id, curRoles).ContinueWith(task=> UserManager.AddToRoleAsync(user.Id, _role), TaskContinuationOptions.OnlyOnRanToCompletion).Result;
+            if (result.Succeeded) {
+                TempData["AlertMessage"] = "User role has changed succesfully";
+                return RedirectToAction("ListUsers", "Users", new { id=_user});
+            }
+
+            TempData["AlertMessage"] = "User role hasn't changed";
+            return RedirectToAction("AdminUserDetails", "Users", new { id = _user });
+        }
+
+
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

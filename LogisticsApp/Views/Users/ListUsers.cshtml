@@ -1,0 +1,42 @@
+﻿@model IEnumerable<LogisticsApp.Models.ApplicationUser>
+@{
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Customer</th>
+            <th scope="col">Custm. ID</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                
+                <td>
+                    @item.Name @item.Surname
+                </td>
+                <td>
+                    @item.CustomerNumber
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.PhoneNumber
+                </td>
+               
+                <td>
+                    <a href="/Users/AdminUserDetails/@item.CustomerNumber" class="btn btn-info btn-sm">Details</a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>

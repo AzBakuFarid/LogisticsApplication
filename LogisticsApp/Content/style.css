@@ -391,7 +391,7 @@ z-index:1000;
     font-weight:bold;
 }
 
-#AdminBundleDetails #customerName, #AdminBundleDetails #customerBalance {
+#AdminBundleDetails #customerName, #AdminBundleDetails #customerBalance, .customerInfo {
     display: inline-block;
     background-color: grey;
     color: black;
@@ -407,3 +407,4 @@ z-index:1000;
     background-color: blue;
     color: white;
 }
+

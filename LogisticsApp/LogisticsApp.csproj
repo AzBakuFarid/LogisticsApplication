@@ -192,6 +192,7 @@
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\StepsController.cs" />
     <Compile Include="Controllers\TaariffController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -388,6 +389,9 @@
     <Content Include="Views\Status\Index.cshtml" />
     <Content Include="Views\Bundle\BundleSize.cshtml" />
     <Content Include="Views\Payment\AdminPaymentForBundle.cshtml" />
+    <Content Include="Views\Users\ListUsers.cshtml" />
+    <Content Include="Views\Users\AdminUserDetails.cshtml" />
+    <Content Include="Views\Users\ListAdmins.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

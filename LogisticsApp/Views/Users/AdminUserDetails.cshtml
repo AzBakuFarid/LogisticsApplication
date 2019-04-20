@@ -1,0 +1,156 @@
+﻿@model LogisticsApp.Models.ApplicationUser
+
+@{
+    Layout = "~/Views/Home/AdminPanel.cshtml";
+}
+
+
+
+    <div id="AdminUserDetails" class="container container-flued">
+
+        <div class="row">
+            <span class="customerInfo">@Model.Name @Model.Surname</span>
+            <span class="customerInfo">@Model.Balance AZN</span>
+            <span class="customerInfo">Role: @ViewBag.UserCurRole</span>
+
+            @using (Html.BeginForm("GivePrivilege", "Account", FormMethod.Post,
+                            new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" value="@Model.CustomerNumber" name="_user" />
+
+                <select class="form-control" name="_role">
+                    <option value="">Select Role from list</option>
+                    @foreach (var item in ViewBag.Roles)
+                    {
+                        <option value="@item.Name">@item.Name</option>
+                    }
+                </select>
+                <button type="submit" class="btn btn-success" style="margin:20px;">Give privilege</button>
+            }
+        </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Birthday)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Birthday)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CustomerNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CustomerNumber)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Address)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Sex)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Sex)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDCardNumber)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.IDCardNumber)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FINNumber)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.FINNumber)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PhoneNumber)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayName("Order counter")
+                    </dt>
+                    <dd>
+                        @ViewBag.OrderCounter
+
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayName("Bundle counter")
+                    </dt>
+                    <dd>
+                        @ViewBag.BundleCounter
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <button type="button" class="btn btn-success" data-toggle="modal" id="AdminBundleAddStatus" data-target="#AdminStatusAddModal" data-id="@Model.Id">Add status</button>
+        <button type="button" class="btn btn-warning" data-toggle="modal" id="AdminBundleEditStatus" data-target="#AdminStatusEditModal" data-id="@Model.Id">Edit status</button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" id="AdminBundleDelStatus" data-target="#AdminStatusDelModal" data-id="@Model.Id">Delete status</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" id="AdminBundleCreateDocument" data-target="#AdminCreateDocumentModal" data-id="@Model.Id">Create document</button> @* bunun logicini hele basha dusmemisem*@
+
+    </div>
+
+
+</div>
